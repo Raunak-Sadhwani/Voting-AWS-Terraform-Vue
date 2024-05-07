@@ -15,7 +15,6 @@ resource "aws_s3_bucket" "firstbucket" {
   }
 }
 
-
 # make bucket to change by only owner 
 resource "aws_s3_bucket_ownership_controls" "example" {
   bucket = aws_s3_bucket.firstbucket.id
@@ -49,6 +48,33 @@ resource "aws_s3_bucket_acl" "example" {
   acl    = "public-read"
 }
 
+# resource "aws_s3_bucket_ownership_controls" "voting" {
+#   bucket = aws_s3_bucket.firstbucket.id
+
+#   rule {
+#     object_ownership = "BucketOwnerPreferred"
+#   }
+# }
+
+resource "aws_s3_bucket_public_access_block" "voting" {
+  bucket = aws_s3_bucket.firstbucket.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+# resource "aws_s3_bucket_acl" "voting" {
+#   depends_on = [
+#     aws_s3_bucket_ownership_controls.voting,
+#     aws_s3_bucket_public_access_block.voting,
+#   ]
+
+#   bucket = aws_s3_bucket.firstbucket.id
+#   acl    = "public-read"
+# }
+
 resource "aws_s3_object" "index" {
   bucket = aws_s3_bucket.firstbucket.id
   key = "index.html"
@@ -57,6 +83,22 @@ resource "aws_s3_object" "index" {
   content_type = "text/html"
 }
 
+resource "aws_s3_bucket_website_configuration" "exampleindex" {
+  bucket = aws_s3_bucket.firstbucket.id
+
+  index_document {
+    suffix = "index.html"
+  }  
+  depends_on = [ aws_s3_bucket_acl.example ]
+}
+
+resource "aws_s3_object" "result" {
+  bucket = aws_s3_bucket.firstbucket.id
+  key    = "result.html"
+  source = "/Users/adityagawade/Desktop/CCFinal/group10/result.html"
+  acl = "public-read"
+  content_type =  "text/html"
+}
 resource "aws_s3_object" "error" {
   bucket = aws_s3_bucket.firstbucket.id
   key = "error.html"
@@ -64,206 +106,122 @@ resource "aws_s3_object" "error" {
   acl = "public-read"
   content_type = "text/html"
 }
-resource "aws_s3_object" "assests" {
-    bucket = aws_s3_bucket.firstbucket.id
+
+# Upload the CSS folder and its contents to the S3 bucket
+# resource "aws_s3_object" "css_folder" {
+#  bucket = aws_s3_bucket.firstbucket.id 
+#   key    = "css/"                            # Specify the key (path) where the folder and its contents will be uploaded
+#   source = "/Users/adityagawade/Desktop/CCFinal/group10/assets/css"  # Specify the local path to the CSS folder
+#   acl           = "public-read"
+#   content_type  = "text/css"  
+# }
+
+
+resource "aws_s3_object" "css" {
+    bucket = aws_s3_bucket.firstbucket.id 
     acl    = "public-read"
-    key    = "assets/"
-    source = "/dev/null"
+    key    = "css/"
+    #source = "/dev/null"
+}
+
+resource "aws_s3_object" "css1" {
+    bucket = aws_s3_bucket.firstbucket.id 
+    acl    = "public-read"
+    key    = "css/css1"
+    #source = "/dev/null"
 }
 
 
-module "template_files" {
-    source = "hashicrop/dir/template"
-    base_dir = "$(path.module)/assets"
-  
-}
-# resource "aws_s3_bucket_object" "css" {
-#     bucket = aws_s3_bucket.firstbucket.id
-#     acl    = "public-read"
-#     key    = "/Users/adityagawade/Desktop/CC/Group no 10/group10/assets/css/"
-#     source = "assets/"
-# }
 
-# resource "aws_s3_object" "assests1" {
-#     bucket = aws_s3_bucket.firstbucket.id
-#     acl    = "public-read"
-#     key    = "assets/css"
-#     source = "/Users/adityagawade/Desktop/CC/Group no 10/group10/assets/css/"
-# }
-# resource "aws_s3_object" "default_s3_content" {
-#     for_each = "${var.default_s3_content}"
-#     bucket = aws_s3_bucket.firstbucket.id
-#     key = "${each.value}/"
-#     source = "/dev/assets/"
+## Css file upload code
+resource "aws_s3_object" "bootstrap" {
+ bucket = aws_s3_bucket.firstbucket.id
+  key    = "css/bootstrap.min.css"
+  source = "/Users/adityagawade/Desktop/CCFinal/group10/assets/css/bootstrap.min.css"  
+  acl = "public-read"
+  content_type =  "text/css"
+}
+
+resource "aws_s3_object" "bootstrap1" {
+ bucket = aws_s3_bucket.firstbucket.id
+  key    = "css/all.min.css"
+  source = "/Users/adityagawade/Desktop/CCFinal/group10/assets/css/all.min.css"  
+  acl = "public-read"
+  content_type =  "text/css"
+}
+resource "aws_s3_object" "bootstrap2" {
+ bucket = aws_s3_bucket.firstbucket.id
+  key    = "css/style.css"
+  source = "/Users/adityagawade/Desktop/CCFinal/group10/assets/css/style.css"  
+  acl = "public-read"
+  content_type =  "text/css"
+}
+resource "aws_s3_object" "bootstrap3" {
+ bucket = aws_s3_bucket.firstbucket.id
+  key    = "css/style.css.map"
+  source = "/Users/adityagawade/Desktop/CCFinal/group10/assets/css/style.css.map"  
+  acl = "public-read"
+  content_type =  "text/css"
+}
+
+resource "aws_s3_object" "image" {
+    bucket = aws_s3_bucket.firstbucket.id 
+    acl    = "public-read"
+    key    = "/images"
+    #source = "/dev/null"
+}
+
+
+resource "aws_s3_object" "image1" {
+ bucket = aws_s3_bucket.firstbucket.id
+  key    = "images/member-01.jpg"
+  source = "/Users/adityagawade/Desktop/CCFinal/group10/assets/images/member-01.jpg"  
+  acl = "public-read"
+  content_type =  "text/jpg"
+}
+resource "aws_s3_object" "image2" {
+ bucket = aws_s3_bucket.firstbucket.id
+  key    = "images/member-02.jpg"
+  source = "/Users/adityagawade/Desktop/CCFinal/group10/assets/images/member-02.jpg"  
+  acl = "public-read"
+  content_type =  "text/jpg"
+}
+resource "aws_s3_object" "image3" {
+ bucket = aws_s3_bucket.firstbucket.id
+  key    = "images/member-03.jpg"
+  source = "/Users/adityagawade/Desktop/CCFinal/group10/assets/images/member-03.jpg"  
+  acl = "public-read"
+  content_type =  "text/jpg"
+}
+
+resource "aws_s3_object" "js" {
+    bucket = aws_s3_bucket.firstbucket.id 
+    acl    = "public-read"
+    key    = "/js"
     
-# }
+    #source = "/dev/null"
+}
 
-  
-# resource "aws_s3_object" "CSS" {
-#     bucket = aws_s3_bucket.firstbucket.id
-#     acl    = "public-read"
-#     key    = "assests/"
-#     source = "/dev/null"
-# }
-#`resource "aws_s3_object" "profile" {
-#   bucket = aws_s3_bucket.firstbucket.id
-#   key = "profile.png"
-#   source = "profile.png"
-#   acl = "public-read"
-# }
-
-
-
-# /* resource "aws_instance" "myfirst" {
-#   ami           = "ami-04b70fa74e45c3917"
-#   instance_type = "t2.micro"
-
-#   tags = {
-#     Name ="myfirst"
-#   }
-# }   
-#  */
-# #Vpc creation in aws    
-
-# resource "aws_vpc" "firstproject" {
-#   cidr_block       = "10.0.0.0/16"
-
-#   tags = {
-#     Name = "First-project"
-#   }
-# }
-
-# #Internet gatway
-
-# resource "aws_internet_gateway" "gateway" {
-#   vpc_id = aws_vpc.firstproject.id
-
-#   tags = {
-#     Name = "Internetgateway"
-#   }
-# }
-
-# #Route table
-# resource "aws_route_table" "myfirstroute" {
-#   vpc_id = aws_vpc.myfirst.id
-
-#   route {
-#     cidr_block = "0.0.0.0/0"
-#     gateway_id = aws_internet_gateway.gateway.id
-#   }
-
-#   route {
-#     ipv6_cidr_block        = "::/0"
-#     gateway_id = aws_internet_gateway.gateway.id
-#   }
-
-#   tags = {
-#     Name = "myfirstroute"
-#   }
-# }
-
-# resource "aws_subnet" "subnet" {
-
-#     vpc_id = aws_vpc.firstproject.id
-#     cidr_block       = "10.0.0.1/24"
-#     availability_zone = "us-east-1"
-
-#    tags = {
-#     Name = "myfirstsubnet"
-#   } 
-# }
+resource "aws_s3_object" "js1" {
+ bucket = aws_s3_bucket.firstbucket.id
+  key    = "images/member-03.jpg"
+  source = "/Users/adityagawade/Desktop/CCFinal/group10/assets/js/bootstrap.bundle.min.js"  
+  acl = "public-read"
+  content_type =  "text/jpg"
+}
+resource "aws_s3_object" "js2" {
+ bucket = aws_s3_bucket.firstbucket.id
+  key    = "images/member-03.jpg"
+  source = "/Users/adityagawade/Desktop/CCFinal/group10/assets/js/jquery-3.2.1.min.js"  
+  acl = "public-read"
+  content_type =  "text/js"
+}
+resource "aws_s3_object" "js3" {
+ bucket = aws_s3_bucket.firstbucket.id
+  key    = "images/member-03.jpg"
+  source = "/Users/adityagawade/Desktop/CCFinal/group10/assets/js/script.js"  
+  acl = "public-read"
+  content_type =  "text/js"
+}
 
 
-# #route table assosation
-
-# resource "aws_route_table_association" "a" {
-#   subnet_id      = aws_subnet.myfirstsubnet.id
-#   route_table_id = aws_route_table.myfirstroute.id
-# }
-
-
-# #security groups
-
-# resource "aws_security_group" "allow_tls" {
-#   name        = "allow_tls"
-#   description = "Allow TLS inbound traffic and all outbound traffic"
-#   vpc_id      = aws_vpc.firstproject.id
-
-#   tags = {
-#     Name = "allow_tls"
-#   }
-# }
-
-# resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv4" {
-#   security_group_id = aws_security_group.allow_tls.id
-#   cidr_ipv4         = ["0.0.0.0/0"]
-#   from_port         = 443
-#   ip_protocol       = "tcp"
-#   to_port           = 443
-# }
-
-
-
-# resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv6" {
-#   security_group_id = aws_security_group.allow_tls.id
-#   cidr_ipv6         = aws_vpc.main.ipv6_cidr_block
-#   from_port         = 443
-#   ip_protocol       = "tcp"
-#   to_port           = 443
-# }
-
-# resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
-#   security_group_id = aws_security_group.allow_tls.id
-#   cidr_ipv4         = "0.0.0.0/0"
-#   ip_protocol       = "-1" # semantically equivalent to all ports
-# }
-
-# resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv6" {
-#   security_group_id = aws_security_group.allow_tls.id
-#   cidr_ipv6         = "::/0"
-#   ip_protocol       = "-1" # semantically equivalent to all ports
-# }
-
-
-# #network interface
-
-# resource "aws_network_interface" "Nw" {
-#   subnet_id       = aws_subnet.myfirstsubnet.id
-#   private_ips     = ["10.0.1.50"]
-#   security_groups = [aws_security_group.allow_tls.id]
-# }
-
-
-# #Elastic IP
-
-# resource "aws_eip" "one" {
-#   domain                    = "vpc"
-#   network_interface         = aws_network_interface.Nw.id
-#   associate_with_private_ip = "10.0.1.50"
-
-#   depends_on = [ aws_internet_gateway.gateway.id ]
-# }
-
-# resource "aws_instance" "myfirst" {
-#   ami           = "ami-04b70fa74e45c3917"
-#   instance_type = "t2.micro"
-#   availability_zone = "us-east-1"
-#   key_name = "My-first"
-
-#   network_interface {
-#     device_index = 0
-#     network_interface_id = aws_network_interface.Nw.id
-#   }
-
-#   user_data = <<-EOF
-#              #!/bin/bash
-#              sudo-apt update -y
-#              sudo apt install apache2 -y
-#              sudo systemctl start apache2
-#              sudo bash -c "your very first web server > /var/www/html/index.html"
-#              EOF
-
-#   tags = {
-#     Name ="myfirst"
-#   }
-# } 
