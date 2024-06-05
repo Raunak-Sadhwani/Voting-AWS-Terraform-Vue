@@ -134,7 +134,7 @@ body {
   margin-bottom: 0px;
 }
 .section-title p {
-  max-width: 850px;
+  /* max-width: 850px; */
   text-align: center;
   float: none;
   margin: auto;
