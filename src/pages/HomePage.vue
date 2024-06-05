@@ -8,7 +8,8 @@
         <p>
           The below are the sample candidates running for the post of President in the XYZ
           Company. <br />
-          Please register your own company account with us to get started and make your own voting system.
+          Please register your own company account with us to get started and make your
+          own voting system.
         </p>
       </div>
       <div class="row">
@@ -21,7 +22,7 @@
             />
             <h4 class="mt-3 fs-5 mb-1 fw-bold">James Anderson</h4>
             <h6 class="fs-7">
-              Runnung to Be: <span class="text-primary fw-bold">President</span>
+              Running to Be: <span class="text-primary fw-bold">President</span>
             </h6>
             <p class="text-dark mt-3 mb-3 fs-8">
               Aliquam utrum nibh rutrum nibh vitae tortor dapibus egestas. Cras
@@ -47,7 +48,7 @@
             />
             <h4 class="mt-3 fs-5 mb-1 fw-bold">Arun Kumar</h4>
             <h6 class="fs-7">
-              Runnung to Be: <span class="text-primary fw-bold">President</span>
+              Running to Be: <span class="text-primary fw-bold">President</span>
             </h6>
             <p class="text-dark mt-3 mb-3 fs-8">
               Aliquam utrum nibh rutrum nibh vitae tortor dapibus egestas. Cras
@@ -73,7 +74,7 @@
             />
             <h4 class="mt-3 fs-5 mb-1 fw-bold">Pream Nath</h4>
             <h6 class="fs-7">
-              Runnung to Be: <span class="text-primary fw-bold">President</span>
+              Running to Be: <span class="text-primary fw-bold">President</span>
             </h6>
             <p class="text-dark mt-3 mb-3 fs-8">
               Aliquam utrum nibh rutrum nibh vitae tortor dapibus egestas. Cras
@@ -100,7 +101,7 @@
             />
             <h4 class="mt-3 fs-5 mb-1 fw-bold">Reena Anath</h4>
             <h6 class="fs-7">
-              Runnung to Be: <span class="text-primary fw-bold">President</span>
+              Running to Be: <span class="text-primary fw-bold">President</span>
             </h6>
             <p class="text-dark mt-3 mb-3 fs-8">
               Aliquam utrum nibh rutrum nibh vitae tortor dapibus egestas. Cras
@@ -127,7 +128,7 @@
             />
             <h4 class="mt-3 fs-5 mb-1 fw-bold">Allen Shory</h4>
             <h6 class="fs-7">
-              Runnung to Be: <span class="text-primary fw-bold">President</span>
+              Running to Be: <span class="text-primary fw-bold">President</span>
             </h6>
             <p class="text-dark mt-3 mb-3 fs-8">
               Aliquam utrum nibh rutrum nibh vitae tortor dapibus egestas. Cras
@@ -154,7 +155,7 @@
             />
             <h4 class="mt-3 fs-5 mb-1 fw-bold">Vimal kumar</h4>
             <h6 class="fs-7">
-              Runnung to Be: <span class="text-primary fw-bold">President</span>
+              Running to Be: <span class="text-primary fw-bold">President</span>
             </h6>
             <p class="text-dark mt-3 mb-3 fs-8">
               Aliquam utrum nibh rutrum nibh vitae tortor dapibus egestas. Cras
@@ -178,10 +179,15 @@
       <div class="row section-title">
         <h2 class="fs-4">About Us</h2>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras eleifend arcu et
-          sem elementum faucibus. Vestibulum faucibus eleifend dolor, id luctus libero.
-          Suspendisse commodo, orci eu mattis mattis, ante ligula porta tortor, ut
-          scelerisque massa risus a quam.
+          In today's fast-paced corporate world, fostering employee engagement and
+          ensuring every voice is heard are essential components of a thriving workplace.
+          Recognizing this need, we developed a voting website tailored specifically for
+          businesses. Our platform allows companies to effortlessly register, add their
+          staff members, and generate unique URLs for each employee. This streamlined
+          process empowers employees to participate in company-wide decisions, vote for
+          their peers, and contribute to a more inclusive and democratic organizational
+          culture. Whether it's for internal awards, decision-making, or feedback
+          collection, our voting website simplifies the process, making every vote count.
         </p>
       </div>
       <div class="row">
@@ -231,7 +237,7 @@
     <div class="copy">
       <div class="container">
         <a href="https://raunak.me"
-          >2024 &copy; All Rights Reserved | Designed and Developed by Raunak</a
+          >2024 &copy; All Rights Reserved | Designed and Developed by <u>Raunak</u></a
         >
         <span>
           <a href=""><i class="fab fa-github"></i></a>

@@ -49,8 +49,8 @@
                 v-model.trim="name"
                 maxlength="60"
                 name="name"
-                oninvalid="setCustomValidity('Invalid! Enter Full Name')"
                 onkeydown="return /[a-z ]/i.test(event.key)"
+                oninvalid="setCustomValidity('Invalid! Enter Full Name')"
                 oninput="setCustomValidity('')"
                 title="Enter Full Name"
                 pattern="^((\b[a-zA-Z]{2,40}\b)\s*){2,3}$"
@@ -66,6 +66,8 @@
                 id="phone"
                 pattern="[0-9]{10, 12}"
                 onkeypress="return /[0-9]/i.test(event.key) || event.key === 'Backspace'"
+                oninvalid="setCustomValidity('Invalid! Enter Correct Phone Number')"
+                oninput="setCustomValidity('')"
                 placeholder="Enter your Phone number"
                 inputmode="numeric"
               />
@@ -76,6 +78,8 @@
                 required
                 type="text"
                 pattern="[^@\s]{2,}@[^@\s]{2,}\.[^@\s]{2,}"
+                oninvalid="setCustomValidity('Enter Correct Email')"
+                oninput="setCustomValidity('')"
                 v-model.trim="email"
                 class="form-control"
                 id="email"
