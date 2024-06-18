@@ -1,4 +1,4 @@
-
+/*
 provider "aws" {
   region = "us-east-1"
   access_key = "AKIAU6GD2NOWRJEM7FO6"
@@ -224,4 +224,4 @@ resource "aws_s3_object" "js3" {
   content_type =  "text/js"
 }
 
-
+*/
