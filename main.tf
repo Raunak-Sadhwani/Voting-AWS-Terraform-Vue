@@ -46,7 +46,7 @@ resource "aws_s3_bucket" "firstbucket" {
 resource "aws_s3_bucket_versioning" "example" {
     bucket = aws_s3_bucket.firstbucket.id
     versioning_configuration {
-      status = "Enabled"
+      status = "Enabled" 
     }
 }
 resource "aws_s3_bucket_ownership_controls" "example" {
