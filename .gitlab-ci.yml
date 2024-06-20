@@ -28,10 +28,8 @@ validate:
   extends: .terraform:validate
   needs: []
 
-image: node:18
 
-before_script:
-  - npm install -g npm@latest
+
 
 cache:
   paths:
@@ -43,6 +41,9 @@ build:
   environment:
     name: $TF_STATE_NAME
     action: prepare
+  image: node:18
+  before_script:
+    - npm install -g npm@latest
   script:
     - npm ci
     - npm run build
