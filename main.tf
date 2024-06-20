@@ -91,13 +91,7 @@ resource "aws_s3_object" "assets" {
   content_type = local.mime_types[split(".", each.key)[length(split(".", each.key)) - 1]] # Get the file extension and lookup the MIME type
 }
 
-terraform {
-  backend "s3" {
-    bucket = "group10first"
-    key    = "terraform.tfstate"
-    region = "us-east-1"
-  }
-}
+
 
 output "bucket_url" {
   value = aws_s3_bucket.firstbucket.website_endpoint
