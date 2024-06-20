@@ -1,25 +1,28 @@
-image: node:18
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Terraform.gitlab-ci.yml
+
+include:
+  - template: Terraform/Base.gitlab-ci.yml  # https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Terraform/Base.gitlab-ci.yml
+  - template: Jobs/SAST-IaC.gitlab-ci.yml   # https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Jobs/SAST-IaC.gitlab-ci.yml
 
 stages:
+  - validate
+  - test
   - build
   - deploy
+  - cleanup
 
-before_script:
-  - npm install -g npm@latest
+fmt:
+  extends: .terraform:fmt
+  needs: []
 
-cache:
-  paths:
-    - node_modules/
+validate:
+  extends: .terraform:validate
+  needs: []
 
 build:
-  stage: build
-  script:
-    - npm ci
-    - npm run build
-  artifacts:
-    paths:
-      - dist/
-    expire_in: 1 week
   extends: .terraform:build
   environment:
     name: $TF_STATE_NAME
@@ -32,15 +35,3 @@ deploy:
   environment:
     name: $TF_STATE_NAME
     action: start
-  image: 
-    name: hashicorp/terraform:light
-    entrypoint: [""]
-  stage: deploy
-  script:
-    - terraform init
-    - terraform validate
-    - terraform plan
-    - terraform apply -auto-approve
-  before_script:
-    - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-    - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
