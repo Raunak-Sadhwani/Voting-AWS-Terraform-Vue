@@ -37,11 +37,8 @@ resource "aws_s3_bucket_policy" "firstbucket_policy" {
 
 
 #creating s3 bucket 
-resource "aws_s3_bucket" "firstbucket" {
+data "aws_s3_bucket" "firstbucket" {
   bucket = var.bucket_name
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 resource "aws_s3_bucket_versioning" "example" {
     bucket = aws_s3_bucket.firstbucket.id
