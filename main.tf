@@ -18,7 +18,7 @@ locals {
 
 #creating s3 bucket 
 data "aws_s3_bucket" "firstbucket" {
-  bucket = var.bucket_name
+  bucket = var.bucket_name 
 }
 
 resource "aws_s3_bucket_policy" "firstbucket_policy" {
