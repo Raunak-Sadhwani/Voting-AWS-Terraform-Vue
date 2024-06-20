@@ -1,6 +1,6 @@
 provider "aws" {
   s3_use_path_style = true
-  region = "us-east-1"
+  region = var.aws_region
 }
 
 locals {
@@ -37,11 +37,8 @@ resource "aws_s3_bucket_policy" "firstbucket_policy" {
 
 
 #creating s3 bucket 
-resource "aws_s3_bucket" "firstbucket" {
+data "aws_s3_bucket" "firstbucket" {
   bucket = var.bucket_name
-  tags = {
-    Name = "Group10"
-  }
 }
 
 resource "aws_s3_bucket_ownership_controls" "example" {
