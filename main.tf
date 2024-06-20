@@ -26,7 +26,7 @@ data "aws_s3_bucket" "firstbucket" {
 #     index_document = "index.html"
 #   }
 
-resource "aws_s3_bucket_website" "firstbucket_website" {
+resource "aws_s3_bucket_website_configuration" "firstbucket_website" {
   bucket = data.aws_s3_bucket.firstbucket.id
   index_document = "dist/index.html"
   error_document = "dist/index.html"
