@@ -40,11 +40,14 @@ build:
     name: $TF_STATE_NAME
     action: prepare
   image: node:18
-  before_script:
-    - npm install -g npm@latest
   script:
     - npm ci
     - npm run build
+    - terraform init && terraform apply -auto-approve
+  before_script:
+    - npm install -g npm@latest
+    - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+    - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
   artifacts:
     paths:
       - build/
