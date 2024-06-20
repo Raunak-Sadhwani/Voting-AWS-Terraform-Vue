@@ -1,5 +1,8 @@
 terraform {
-  backend "http" {
+  backend "s3" {
+    bucket = "group10bucket"
+    key    = "terraform.tfstate"
+    region = "us-east-1"
   }
 }
 
@@ -59,7 +62,7 @@ resource "aws_s3_bucket_ownership_controls" "example" {
 
 # make bucket public 
 resource "aws_s3_bucket_public_access_block" "example" {
-  bucket = aws_s3_bucket.firstbucket.id
+  bucket                  = aws_s3_bucket.firstbucket.id
   block_public_acls       = false
   block_public_policy     = false
   ignore_public_acls      = false
@@ -76,6 +79,7 @@ resource "aws_s3_bucket_acl" "example" {
   bucket = aws_s3_bucket.firstbucket.id
   acl    = var.bucket_acl
 }
+
 
 
 resource "aws_s3_object" "index" {
