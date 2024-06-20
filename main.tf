@@ -1,8 +1,13 @@
+terraform {
+  backend "http" {
+  }
+}
+
+
+
 provider "aws" {
   s3_use_path_style = true
   region            = var.aws_region
-  access_key        = "AKIAU6GD2NOWRJEM7FO6"
-  secret_key        = "T7Halb3bdKGAKeWRcLes+5CH07N+ExfB7JFxsZE/"
 }
 
 
@@ -78,24 +83,6 @@ resource "aws_s3_bucket_acl" "example" {
 resource "aws_s3_object" "index" {
   bucket       = aws_s3_bucket.firstbucket.id
   key          = "index.html"
-  source       = "dist/index.html"
-  content_type = "text/html"
-}
-
-resource "aws_s3_bucket_website_configuration" "exampleindex" {
-  bucket = aws_s3_bucket.firstbucket.id
-  index_document {
-    suffix = "index.html"
-  }
-  depends_on = [aws_s3_bucket_acl.example]
-}
-
-
-# error page same as index page
-
-resource "aws_s3_object" "error" {
-  bucket       = aws_s3_bucket.firstbucket.id
-  key          = "error.html"
   source       = "dist/index.html"
   content_type = "text/html"
 }
