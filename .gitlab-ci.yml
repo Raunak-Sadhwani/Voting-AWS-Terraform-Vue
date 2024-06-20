@@ -26,11 +26,26 @@ validate:
   extends: .terraform:validate
   needs: []
 
+before_script:
+  - npm install -g npm@latest
+
+cache:
+  paths:
+    - node_modules/
+
+
 build:
   extends: .terraform:build
   environment:
     name: $TF_STATE_NAME
     action: prepare
+  script:
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - build/
+    expire_in: 1 week
 
 deploy:
   extends: .terraform:deploy
@@ -39,3 +54,9 @@ deploy:
   environment:
     name: $TF_STATE_NAME
     action: start
+  script:
+    - terraform init
+    - terraform apply -auto-approve
+  before_script:
+    - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+    - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
