@@ -202,7 +202,7 @@
               ><h4 class="mt-3 fs-5 mb-1 fw-bold">Raunak Sadhwani</h4></a
             >
             <h6 class="fs-7">
-              Role: <span class="text-danger fw-bold">Frontend & UI/UX Developer</span>
+              Role: <span class="text-danger fw-bold">FullStack & UI/UX Developer</span>
             </h6>
             <p class="text-dark mt-3 mb-3 fs-8">
               I am a Master's student in Software Engineering with two years of full-stack

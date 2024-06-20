@@ -1,9 +1,24 @@
 provider "aws" {
   s3_use_path_style = true
-  region            = "us-east-1"
+  region            = var.aws_region
   access_key        = "AKIAU6GD2NOWRJEM7FO6"
   secret_key        = "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"
 }
+
+
+locals {
+  mime_types = {
+    css  = "text/css"
+    js   = "application/javascript"
+    jpg  = "image/jpeg"
+    jpeg = "image/jpeg"
+    png  = "image/png"
+    gif  = "image/gif"
+    html = "text/html"
+    svg  = "image/svg+xml"
+  }
+}
+
 resource "aws_s3_bucket_policy" "firstbucket_policy" {
   bucket = aws_s3_bucket.firstbucket.id
 
@@ -20,30 +35,18 @@ resource "aws_s3_bucket_policy" "firstbucket_policy" {
     ]
   })
 }
-locals {
-  mime_types = {
-    css  = "text/css"
-    js   = "application/javascript"
-    jpg  = "image/jpeg"
-    jpeg = "image/jpeg"
-    png  = "image/png"
-    gif  = "image/gif"
-    html = "text/html"
-    svg  = "image/svg+xml"
-    # Add more MIME types as needed
-  }
-}
+
+
 
 
 #creating s3 bucket 
 resource "aws_s3_bucket" "firstbucket" {
-  bucket = "group10first"
+  bucket = var.bucket_name
   tags = {
     Name = "Group10"
   }
 }
 
-# make bucket to change by only owner 
 resource "aws_s3_bucket_ownership_controls" "example" {
   bucket = aws_s3_bucket.firstbucket.id
   rule {
@@ -68,8 +71,9 @@ resource "aws_s3_bucket_acl" "example" {
   ]
 
   bucket = aws_s3_bucket.firstbucket.id
-  acl    = "public-read"
+  acl    = var.bucket_acl
 }
+
 
 resource "aws_s3_object" "index" {
   bucket       = aws_s3_bucket.firstbucket.id
@@ -86,7 +90,17 @@ resource "aws_s3_bucket_website_configuration" "exampleindex" {
   depends_on = [aws_s3_bucket_acl.example]
 }
 
-# put the assets in the bucket
+
+# error page same as index page
+
+resource "aws_s3_object" "error" {
+  bucket       = aws_s3_bucket.firstbucket.id
+  key          = "error.html"
+  source       = "dist/index.html"
+  content_type = "text/html"
+}
+
+
 # put the assets in the bucket
 resource "aws_s3_object" "assets" {
   for_each     = fileset("dist/assets", "**/*")
