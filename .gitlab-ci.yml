@@ -2,17 +2,12 @@ include:
   - template: Terraform/Base.gitlab-ci.yml  # https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Terraform/Base.gitlab-ci.yml
   - template: Jobs/SAST-IaC.gitlab-ci.yml   # https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Jobs/SAST-IaC.gitlab-ci.yml
 
-image: hashicorp/terraform:light
+image: node:18
 
 stages:
-  - test
   - build
   - deploy
   - cleanup
-
-fmt:
-  extends: .terraform:fmt
-  needs: []
 
 before_script:
   - npm install -g npm@latest
@@ -48,6 +43,8 @@ deploy:
   stage: deploy
   script:
     - terraform init
+    - terraform validate
+    - terraform plan
     - terraform apply -auto-approve
   before_script:
     - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
