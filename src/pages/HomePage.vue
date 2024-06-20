@@ -220,7 +220,7 @@
               src="../assets/images/aditya.jpg"
               alt=""
             />
-            <h4 class="mt-3 fs-5 mb-1 fw-bold">Aditya Gawade</h4>
+            <h4 class="mt-3 fs-5 mb-1 fw-bold">Adi Gawade</h4>
             <h6 class="fs-7">
               Role: <span class="text-danger fw-bold">Backend Developer</span>
             </h6>
