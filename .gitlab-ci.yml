@@ -1,9 +1,5 @@
 image: node:18
 
-image: 
-  name: hashicorp/terraform:light
-  entrypoint: [""]
-
 stages:
   - build
   - deploy
@@ -26,7 +22,9 @@ build:
     expire_in: 1 week
 
 deploy:
-  image: hashicorp/terraform:latest
+  image: 
+    name: hashicorp/terraform:light
+    entrypoint: [""]
   stage: deploy
   script:
     - terraform init
