@@ -45,8 +45,7 @@ backend-setup:
     - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
   environment:
     name: $TF_STATE_NAME
-    url: $TF_STATE_URL
-    on_stop: stop-remote-state
+    action: prepare
 
 
 build:
