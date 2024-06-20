@@ -1,28 +1,36 @@
-include:
- - template: Terraform/Base.gitlab-ci.yml  
- - template: Jobs/SAST-IaC.gitlab-ci.yml   
+image: node:18
 
 stages:
- - validate
- - test
- - build
- - deploy
- - cleanup
+  - build
+  - deploy
 
-fmt:
- extends: .terraform:fmt
- needs: []
+before_script:
+  - npm install -g npm@latest
 
-validate:
- extends: .terraform:validate
- needs: []
+cache:
+  paths:
+    - node_modules/
 
 build:
- extends: .terraform:build
+  stage: build
+  script:
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - build/
+    expire_in: 1 week
 
 deploy:
- extends: .terraform:deploy
- dependencies:
-   - build
- environment:
-   name: $TF_STATE_NAME
+  image: hashicorp/terraform:latest
+  stage: deploy
+  script:
+    - terraform init
+    - terraform apply -auto-approve
+  environment:
+    name: production
+  dependencies:
+    - build
+  before_script:
+    - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+    - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
