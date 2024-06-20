@@ -38,7 +38,7 @@ cache:
 backend-setup:
   stage: backend-setup
   script:
-    - terraform init -backend=false
+    - terraform init -reconfigure
     - terraform apply -auto-approve
   artifacts:
     paths:
