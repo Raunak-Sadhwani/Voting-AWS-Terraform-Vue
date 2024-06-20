@@ -1,6 +1,6 @@
 provider "aws" {
   s3_use_path_style = true
-  region = var.aws_region
+  region = "us-east-1"
 }
 
 locals {
@@ -14,10 +14,6 @@ locals {
     html = "text/html"
     svg  = "image/svg+xml"
   }
-}
-
-data "aws_s3_bucket" "firstbucket" {
-  bucket = var.bucket_name
 }
 
 resource "aws_s3_bucket_policy" "firstbucket_policy" {
@@ -38,6 +34,15 @@ resource "aws_s3_bucket_policy" "firstbucket_policy" {
 }
 
 
+
+
+#creating s3 bucket 
+resource "aws_s3_bucket" "firstbucket" {
+  bucket = var.bucket_name
+  tags = {
+    Name = "Group10"
+  }
+}
 
 resource "aws_s3_bucket_ownership_controls" "example" {
   bucket = aws_s3_bucket.firstbucket.id
