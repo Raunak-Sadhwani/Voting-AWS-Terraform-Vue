@@ -1,11 +1,3 @@
-terraform {
-  backend "s3" {
-    bucket = "group10first"
-    key    = "terraform.tfstate"
-    region = "us-east-1"
-  }
-}
-
 provider "aws" {
   s3_use_path_style = true
   region            = var.aws_region
@@ -97,6 +89,14 @@ resource "aws_s3_object" "assets" {
   key          = "assets/${each.key}"
   source       = "dist/assets/${each.key}"
   content_type = local.mime_types[split(".", each.key)[length(split(".", each.key)) - 1]] # Get the file extension and lookup the MIME type
+}
+
+terraform {
+  backend "s3" {
+    bucket = "group10first"
+    key    = "terraform.tfstate"
+    region = "us-east-1"
+  }
 }
 
 output "bucket_url" {
