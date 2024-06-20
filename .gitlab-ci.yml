@@ -38,13 +38,16 @@ cache:
 backend-setup:
   stage: backend-setup
   script:
-    - terraform init -reconfigure
-    - terraform apply -auto-approve
-  artifacts:
-    paths:
-      - backend.tf
-    expire_in: 1 week
-  when: always
+    - cd remote-state
+    - terraform init && terraform apply -auto-approve
+  before_script:
+    - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+    - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+  environment:
+    name: $TF_STATE_NAME
+    url: $TF_STATE_URL
+    on_stop: stop-remote-state
+
 
 build:
   extends: .terraform:build
