@@ -19,7 +19,19 @@ locals {
 #creating s3 bucket 
 data "aws_s3_bucket" "firstbucket" {
   bucket = var.bucket_name 
+  
 }
+
+# website {
+#     index_document = "index.html"
+#   }
+
+resource "aws_s3_bucket_website" "firstbucket_website" {
+  bucket = data.aws_s3_bucket.firstbucket.id
+  index_document = "dist/index.html"
+  error_document = "dist/index.html"
+}
+
 
 resource "aws_s3_bucket_policy" "firstbucket_policy" {
   bucket = data.aws_s3_bucket.firstbucket.id
