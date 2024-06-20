@@ -16,6 +16,7 @@ kics-iac-sast:
 stages:
   - validate
   - test
+  - backend-setup
   - build
   - deploy
   - cleanup
@@ -29,12 +30,22 @@ validate:
   needs: []
 
 
-
-
 cache:
   paths:
     - node_modules/
 
+
+backend-setup:
+  image: hashicorp/terraform:latest
+  stage: backend-setup
+  script:
+    - terraform init -backend=false
+    - terraform apply -auto-approve
+  artifacts:
+    paths:
+      - backend.tf
+    expire_in: 1 week
+  when: always
 
 build:
   extends: .terraform:build
@@ -65,3 +76,4 @@ deploy:
   before_script:
     - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
     - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+  when: on_success
