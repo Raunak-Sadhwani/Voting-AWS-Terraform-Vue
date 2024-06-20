@@ -32,11 +32,11 @@ resource "aws_s3_bucket_website_configuration" "firstbucket_website" {
   #error_document = "dist/index.html"
 
   index_document {
-    suffix = "dist/index.html"
+    suffix = "index.html"
   }
 
   error_document {
-    key = "dist/error.html"
+    key = "error.html"
   }
 }
 
