@@ -28,8 +28,16 @@ data "aws_s3_bucket" "firstbucket" {
 
 resource "aws_s3_bucket_website_configuration" "firstbucket_website" {
   bucket = data.aws_s3_bucket.firstbucket.id
-  index_document = "dist/index.html"
-  error_document = "dist/index.html"
+  #index_document = "dist/index.html"
+  #error_document = "dist/index.html"
+
+  index_document {
+    suffix = "dist/index.html"
+  }
+
+  error_document {
+    key = "dist/error.html"
+  }
 }
 
 
