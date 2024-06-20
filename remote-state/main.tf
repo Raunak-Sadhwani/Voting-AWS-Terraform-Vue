@@ -1,12 +1,10 @@
 provider "aws" {
+  s3_use_path_style = true
   region = "us-east-1"
 }
 
-resource "aws_s3_bucket" "firstbucket" {
+data "aws_s3_bucket" "firstbucket" {
   bucket = "group10first"
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 resource "aws_s3_bucket_versioning" "example" {
