@@ -43,15 +43,13 @@ build:
   script:
     - npm ci
     - npm run build
-    - terraform init && terraform apply -auto-approve
   before_script:
     - npm install -g npm@latest
-    - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-    - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
   artifacts:
     paths:
-      - build/
-    expire_in: 1 week
+      - dist/
+
+
 
 deploy:
   extends: .terraform:deploy
