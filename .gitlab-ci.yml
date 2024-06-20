@@ -36,6 +36,9 @@ cache:
 
 
 backend-setup:
+  image: 
+    name: hashicorp/terraform:latest
+    entrypoint: [""] 
   stage: backend-setup
   script:
     - cd remote-state
