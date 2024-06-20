@@ -36,7 +36,6 @@ cache:
 
 
 backend-setup:
-  image: hashicorp/terraform:latest
   stage: backend-setup
   script:
     - terraform init -backend=false
