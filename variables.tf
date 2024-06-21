@@ -21,3 +21,32 @@ variable "AWS_ACCOUNT_ID" {
   type        = string
   default     = "339713092525"
 }
+variable "function_upload_name_lambda" {
+  default = "mygrocery_put_object"
+}
+
+variable "function_upload_handler_lambda" {
+  default = "mygrocery_put_object.lambda_handler"
+}
+
+variable "function_get_name_lambda" {
+  default = "mygrocery_get_object"
+}
+
+variable "function_get_handler_lambda" {
+  default = "mygrocery_get_object.lambda_handler"
+}
+
+
+variable "runtime_version" {
+  default = "python3.8"
+}
+
+
+variable "api_gateway_name" {
+  default = "mygrocery-web-put-api"
+}
+
+variable "api_gateway_stage_name" {
+  default = "Gaayu"
+}
