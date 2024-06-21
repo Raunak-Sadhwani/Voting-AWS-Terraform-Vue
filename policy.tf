@@ -1,6 +1,4 @@
 
-
-
 resource "aws_s3_bucket_policy" "firstbucket_policy" {
   bucket = aws_s3_bucket.firstbucket.id
 
