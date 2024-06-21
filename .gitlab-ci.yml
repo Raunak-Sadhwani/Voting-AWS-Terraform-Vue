@@ -2,11 +2,20 @@ include:
   - template: Terraform/Base.gitlab-ci.yml  # https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Terraform/Base.gitlab-ci.yml
   - template: Jobs/SAST-IaC.gitlab-ci.yml   # https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Jobs/SAST-IaC.gitlab-ci.yml
 
-
+variables:
+  AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+  AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
 
 kics-iac-sast:
   variables:
     SAST_ANALYZER_IMAGE_TAG: "4.1.11"
+
+before_script:
+ - apk update --repository=http://dl-cdn.alpinelinux.org/alpine/v3.13/main
+ - apk add aws-cli
+ - apk add bash
+ - apk add npm
+ - export PATH="/usr/local/bin:$PATH"
 
 stages:
   - validate
@@ -54,6 +63,7 @@ deploy:
     action: start
   script:
     - terraform init
+    - terraform plan
     - terraform apply -auto-approve
   before_script:
     - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
