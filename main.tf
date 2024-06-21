@@ -24,11 +24,6 @@ resource "aws_s3_bucket" "firstbucket" {
   }
 }
 
-
-
-
-
-
 resource "aws_s3_bucket_versioning" "example" {
   bucket = aws_s3_bucket.firstbucket.id
   versioning_configuration {
@@ -94,8 +89,6 @@ resource "aws_s3_bucket_website_configuration" "exampleerror" {
   depends_on = [aws_s3_bucket_acl.example]
 }
 
-
-
 # put the assets in the bucket
 resource "aws_s3_object" "assets" {
   for_each     = fileset("dist/assets", "**/*")
@@ -104,8 +97,6 @@ resource "aws_s3_object" "assets" {
   source       = "dist/assets/${each.key}"
   content_type = local.mime_types[split(".", each.key)[length(split(".", each.key)) - 1]] # Get the file extension and lookup the MIME type
 }
-
-
 
 output "bucket_url" {
   value = aws_s3_bucket.firstbucket.website_endpoint
