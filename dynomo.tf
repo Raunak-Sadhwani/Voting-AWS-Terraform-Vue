@@ -1,101 +1,68 @@
-# resource "aws_dynamodb_table" "companies" {
-#   name           = "companies"
-#   billing_mode   = "PAY_PER_REQUEST"
-#   hash_key       = "company_id"
-
-#   attribute {
-#     name = "company_id"
-#     type = "S"
-#   }
-
-#   tags = {
-#     Name = "CompaniesTable"
-#   }
+# {
+#   "company_id": "123456789",
+#   "name": "Acme Inc.",
+#   "email": "info@acme.com",
+#   "users": [
+#     {
+#       "user_id": "user1",
+#       "user_name": "Alice",
+#       "user_email": "alice@example.com"
+#     },
+#     {
+#       "user_id": "user2",
+#       "user_name": "Bob",
+#       "user_email": "bob@example.com"
+#     }
+#   ]
 # }
 
-# resource "aws_dynamodb_table" "users" {
-#   name           = "users"
-#   billing_mode   = "PAY_PER_REQUEST"
-#   hash_key       = "user_id"
-#   range_key      = "company_id"
+# create me a dynamo db table as above
+resource "aws_dynamodb_table" "mygrocery" {
+  name           = "mygrocery"
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 5
+  write_capacity = 5
+  hash_key       = "company_id"
+  range_key      = "user_id"
 
-#   attribute {
-#     name = "user_id"
-#     type = "S"
-#   }
+  attribute {
+    name = "company_id"
+    type = "S"
+  }
 
-#   attribute {
-#     name = "company_id"
-#     type = "S"
-#   }
+  attribute {
+    name = "user_id"
+    type = "S"
+  }
 
-#   global_secondary_index {
-#     name               = "CompanyIndex"
-#     hash_key           = "company_id"
-#     projection_type    = "ALL"
-#     write_capacity     = 1
-#     read_capacity      = 1
-#   }
+  attribute {
+    name = "name"
+    type = "S"
+  }
 
-#   tags = {
-#     Name = "UsersTable"
-#   }
-# }
+  attribute {
+    name = "email"
+    type = "S"
+  }
 
-# resource "aws_dynamodb_table" "polls" {
-#   name           = "polls"
-#   billing_mode   = "PAY_PER_REQUEST"
-#   hash_key       = "poll_id"
-#   range_key      = "company_id"
+  ttl {
+    attribute_name = "ttl"
+    enabled        = true
+  }
 
-#   attribute {
-#     name = "poll_id"
-#     type = "S"
-#   }
+    global_secondary_index {
+        name               = "company_id-index"
+        hash_key           = "company_id"
+        range_key          = "user_id"
+        write_capacity     = 5
+        read_capacity      = 5
+        projection_type    = "ALL"
+    }
 
-#   attribute {
-#     name = "company_id"
-#     type = "S"
-#   }
+    tags = {
+        Name = "mygrocery"
+    }
 
-#   global_secondary_index {
-#     name               = "CompanyIndex"
-#     hash_key           = "company_id"
-#     projection_type    = "ALL"
-#     write_capacity     = 1
-#     read_capacity      = 1
-#   }
+}
 
-#   tags = {
-#     Name = "PollsTable"
-#   }
-# }
 
-# resource "aws_dynamodb_table" "votes" {
-#   name           = "votes"
-#   billing_mode   = "PAY_PER_REQUEST"
-#   hash_key       = "vote_id"
-#   range_key      = "poll_id"
-
-#   attribute {
-#     name = "vote_id"
-#     type = "S"
-#   }
-
-#   attribute {
-#     name = "poll_id"
-#     type = "S"
-#   }
-
-#   global_secondary_index {
-#     name               = "PollIndex"
-#     hash_key           = "poll_id"
-#     projection_type    = "ALL"
-#     write_capacity     = 1
-#     read_capacity      = 1
-#   }
-
-#   tags = {
-#     Name = "VotesTable"
-#   }
-# }
