@@ -26,7 +26,7 @@ resource "aws_s3_bucket" "firstbucket" {
 
 # website configuration
 resource "aws_s3_bucket_website" "firstbucket" {
-  bucket = data.aws_s3_bucket.firstbucket.id
+  bucket = aws_s3_bucket.firstbucket.id
   website {
     index_document = "dist/index.html"
     error_document = "dist/index.html"
@@ -37,7 +37,7 @@ resource "aws_s3_bucket_website" "firstbucket" {
 
 
 resource "aws_s3_bucket_policy" "firstbucket_policy" {
-  bucket = data.aws_s3_bucket.firstbucket.id
+  bucket = aws_s3_bucket.firstbucket.id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -58,13 +58,13 @@ resource "aws_s3_bucket_policy" "firstbucket_policy" {
 
 
 resource "aws_s3_bucket_versioning" "example" {
-    bucket = data.aws_s3_bucket.firstbucket.id
+    bucket = aws_s3_bucket.firstbucket.id
     versioning_configuration {
       status = "Enabled" 
     }
 }
 resource "aws_s3_bucket_ownership_controls" "example" {
-  bucket = data.aws_s3_bucket.firstbucket.id
+  bucket = aws_s3_bucket.firstbucket.id
   rule {
     object_ownership = "BucketOwnerPreferred"
   }
@@ -72,7 +72,7 @@ resource "aws_s3_bucket_ownership_controls" "example" {
 
 # make bucket public 
 resource "aws_s3_bucket_public_access_block" "example" {
-  bucket                  = data.aws_s3_bucket.firstbucket.id
+  bucket                  = aws_s3_bucket.firstbucket.id
   block_public_acls       = false
   block_public_policy     = false
   ignore_public_acls      = false
@@ -86,14 +86,14 @@ resource "aws_s3_bucket_acl" "example" {
     aws_s3_bucket_public_access_block.example,
   ]
 
-  bucket = data.aws_s3_bucket.firstbucket.id
+  bucket = aws_s3_bucket.firstbucket.id
   acl    = var.bucket_acl
 }
 
 
 
 resource "aws_s3_object" "index" {
-  bucket       = data.aws_s3_bucket.firstbucket.id
+  bucket       = aws_s3_bucket.firstbucket.id
   key          = "index.html"
   source       = "dist/index.html"
   content_type = "text/html"
@@ -103,7 +103,7 @@ resource "aws_s3_object" "index" {
 # put the assets in the bucket
 resource "aws_s3_object" "assets" {
   for_each     = fileset("dist/assets", "**/*")
-  bucket       = data.aws_s3_bucket.firstbucket.id
+  bucket       = aws_s3_bucket.firstbucket.id
   key          = "assets/${each.key}"
   source       = "dist/assets/${each.key}"
   content_type = local.mime_types[split(".", each.key)[length(split(".", each.key)) - 1]] # Get the file extension and lookup the MIME type
@@ -112,7 +112,7 @@ resource "aws_s3_object" "assets" {
 
 
 output "bucket_url" {
-  value = data.aws_s3_bucket.firstbucket.website_endpoint
+  value = aws_s3_bucket.firstbucket.website_endpoint
 }
 
 
