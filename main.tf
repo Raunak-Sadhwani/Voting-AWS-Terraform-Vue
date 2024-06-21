@@ -1,6 +1,6 @@
 provider "aws" {
   s3_use_path_style = true
-  region = var.aws_region
+  region            = var.aws_region
 }
 
 locals {
@@ -22,16 +22,12 @@ resource "aws_s3_bucket" "firstbucket" {
   tags = {
     Name = "group10first"
   }
-}
-
-# website configuration
-resource "aws_s3_bucket_website" "firstbucket" {
-  bucket = aws_s3_bucket.firstbucket.id
   website {
     index_document = "dist/index.html"
     error_document = "dist/index.html"
   }
 }
+
 
 
 
@@ -58,10 +54,10 @@ resource "aws_s3_bucket_policy" "firstbucket_policy" {
 
 
 resource "aws_s3_bucket_versioning" "example" {
-    bucket = aws_s3_bucket.firstbucket.id
-    versioning_configuration {
-      status = "Enabled" 
-    }
+  bucket = aws_s3_bucket.firstbucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
 }
 resource "aws_s3_bucket_ownership_controls" "example" {
   bucket = aws_s3_bucket.firstbucket.id
