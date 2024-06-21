@@ -24,13 +24,6 @@ resource "aws_s3_bucket" "firstbucket" {
   }
 }
 
-# create website
-resource "aws_s3_bucket_website" "firstbucket" {
-  bucket         = aws_s3_bucket.firstbucket.id
-  index_document = "index.html"
-  error_document = "error.html"
-}
-
 resource "aws_s3_bucket_policy" "firstbucket_policy" {
   bucket = aws_s3_bucket.firstbucket.id
 
@@ -93,6 +86,30 @@ resource "aws_s3_object" "index" {
   source       = "dist/index.html"
   content_type = "text/html"
 }
+
+resource "aws_s3_bucket_website_configuration" "exampleindex" {
+  bucket = aws_s3_bucket.firstbucket.id
+  index_document {
+    suffix = "index.html"
+  }
+  depends_on = [aws_s3_bucket_acl.example]
+}
+
+resource "aws_s3_object" "error" {
+  bucket       = aws_s3_bucket.firstbucket.id
+  key          = "error.html"
+  source       = "dist/index.html"
+  content_type = "text/html"
+}
+
+resource "aws_s3_bucket_website_configuration" "exampleerror" {
+  bucket = aws_s3_bucket.firstbucket.id
+  index_document {
+    suffix = "error.html"
+  }
+  depends_on = [aws_s3_bucket_acl.example]
+}
+
 
 
 # put the assets in the bucket
