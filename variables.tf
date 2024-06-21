@@ -15,3 +15,9 @@ variable "bucket_acl" {
   type        = string
   default = "public-read"
 }
+
+variable "AWS_ACCOUNT_ID" {
+  
+  type        = string
+  default     = "339713092525"
+}
