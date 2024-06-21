@@ -17,28 +17,23 @@ locals {
 }
 
 #creating s3 bucket 
-data "aws_s3_bucket" "firstbucket" {
-  bucket = var.bucket_name 
-  
+resource "aws_s3_bucket" "firstbucket" {
+  bucket = var.bucket_name
+  tags = {
+    Name = "group10first"
+  }
 }
 
-# website {
-#     index_document = "index.html"
-#   }
-
-resource "aws_s3_bucket_website_configuration" "firstbucket_website" {
+# website configuration
+resource "aws_s3_bucket_website" "firstbucket" {
   bucket = data.aws_s3_bucket.firstbucket.id
-  #index_document = "dist/index.html"
-  #error_document = "dist/index.html"
-
-  index_document {
-    suffix = "index.html"
-  }
-
-  error_document {
-    key = "error.html"
+  website {
+    index_document = "dist/index.html"
+    error_document = "dist/index.html"
   }
 }
+
+
 
 
 resource "aws_s3_bucket_policy" "firstbucket_policy" {
