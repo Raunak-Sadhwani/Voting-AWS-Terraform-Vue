@@ -1,0 +1,19 @@
+[
+    {
+        "company_id": "123456789",
+        "name": "Acme Inc.",
+        "email": "info@acme.com",
+        "users": [
+            {
+                "user_id": "user1",
+                "user_name": "Alice",
+                "user_email": "alice@example.com"
+            },
+            {
+                "user_id": "user2",
+                "user_name": "Bob",
+                "user_email": "bob@example.com"
+            }
+        ]
+    }
+]
