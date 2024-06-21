@@ -22,32 +22,14 @@ resource "aws_s3_bucket" "firstbucket" {
   tags = {
     Name = "group10first"
   }
-  /* website {
-    index_document = "dist/index.html"
-    error_document = "dist/index.html"
-  } */
-
 }
 
-resource "aws_s3_bucket_website_configuration" "firstbucket_website" {
-  bucket = aws_s3_bucket.firstbucket.id
-
-  /* index_document = "dist/index.html"
-  error_document = "dist/index.html" */
-  #index_document = "dist/index.html"
-  #error_document = "dist/index.html"
-
-  index_document {
-    suffix = "dist/index.html"
-  }
-
-  error_document {
-    key = "dist/index.html"
-  }
+# create website
+resource "aws_s3_bucket_website" "firstbucket" {
+  bucket         = aws_s3_bucket.firstbucket.id
+  index_document = "index.html"
+  error_document = "error.html"
 }
-
-
-
 
 resource "aws_s3_bucket_policy" "firstbucket_policy" {
   bucket = aws_s3_bucket.firstbucket.id
