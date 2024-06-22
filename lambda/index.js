@@ -10,7 +10,7 @@ exports.handler = async (event) => {
         case 'POST':
             try {
                 await _postData(JSON.parse(event.body));
-                return _responseHelper(200, "Records inserted successfully!");
+                return _responseHelper(200, JSON.stringify({ message: "Data inserted successfully!" }));
             } catch (error) {
                 return _responseHelper(404, error.message);
             }
@@ -35,35 +35,14 @@ exports.handler = async (event) => {
 };
 
 const _postData = async (oRequestData) => {
-    let oData = [], count = 0;
-
-    for (let idx = 0; idx < oRequestData.length; idx++) {
-        const item = oRequestData[idx];
-        count++;
-
-        oData.push({
-            PutRequest: {
-                Item: {
-                    ...item,
-                    company_id: item.company_id,
-                }
-            }
-        });
-
-        // Batch write rejects requests with more than 25 request items
-        if (count === 25 || (idx === (oRequestData.length - 1))) {
-            try {
-                await ddc.batchWrite({
-                    RequestItems: {
-                        [tableName]: oData // DynamoDB table name
-                    }
-                }).promise();
-                oData = [];
-                count = 0;
-            } catch (error) {
-                throw new Error(error.message);
-            }
-        }
+    const oParams = {
+        TableName: tableName,
+        Item: oRequestData
+    };
+    try {
+        await ddc.put(oParams).promise();
+    } catch (error) {
+        throw new Error(error.message);
     }
 };
 

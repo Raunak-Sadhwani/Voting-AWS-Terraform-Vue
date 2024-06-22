@@ -4,7 +4,7 @@
 
     <div class="container-xl big-padding">
       <div class="row section-title">
-        <h2 class="fs-4">XYZ Organization</h2>
+        <h2 class="fs-4">{{ name }}</h2>
         <p>
           The below are the sample candidates running for the post of President in the XYZ
           Company. <br />
@@ -325,11 +325,25 @@ export default {
     TheHeader,
     LoginModal,
   },
-  // mounted() {
-  //   document.getElementById("submitVote").addEventListener("click", () => {
-  //     document.getElementById("submit-form").click();
-  //   });
-  // },
+  data() {
+    return {
+      name: "",
+      apiEndpoint: import.meta.env.VITE_API_ENDPOINT,
+    };
+  },
+  mounted() {
+    this.getData();
+  },
+  methods: {
+    async getData() {
+      const response = await fetch(
+        "https://gj8dtjc8w9.execute-api.us-east-1.amazonaws.com/prod/voting"
+      );
+      const data = await response.json();
+      console.log(data);
+      this.name = data[1].name;
+    },
+  },
 };
 </script>
 

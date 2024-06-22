@@ -187,3 +187,13 @@ resource "aws_api_gateway_integration_response" "voting_integration_response" {
 output "api_endpoint" {
   value = "${aws_api_gateway_deployment.voting_api_deployment.invoke_url}/voting"
 }
+
+resource "null_resource" "update_env" {
+  provisioner "local-exec" {
+    command = "update_env.bat"
+  }
+
+  triggers = {
+    api_endpoint = aws_api_gateway_deployment.voting_api_deployment.invoke_url
+  }
+}
