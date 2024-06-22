@@ -1,179 +1,156 @@
-#1 Create Lambda Function
-data "archive_file" "lambda_zip_file" {
-  type        = "zip"
-  source_file = "lambda/index.js"
-  output_path = "lambda/index.zip"
-}
 
+# IAM role for Lambda
 resource "aws_iam_role" "lambda_role" {
-  name               = "lambda_role"
-  assume_role_policy = file("lambda-policy.json")
+  name = "lambda_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+      }
+    ]
+  })
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_exec_role_attachment" {
+# IAM policy for Lambda to access DynamoDB
+resource "aws_iam_policy" "lambda_policy" {
+  name        = "lambda_policy"
+  description = "Policy to allow Lambda to access DynamoDB"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "dynamodb:BatchGetItem",
+          "dynamodb:GetItem",
+          "dynamodb:Query",
+          "dynamodb:Scan",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:DeleteItem"
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+# Attach policy to role
+resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
   role       = aws_iam_role.lambda_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  policy_arn = aws_iam_policy.lambda_policy.arn
 }
 
-resource "aws_lambda_function" "voating_lambda_function" {
-  filename         = "lambda/index.zip"
-  function_name    = "DemoLambdaFunction"
-  role             = aws_iam_role.lambda_role.arn
-  handler          = "index.handler"
-  runtime          = "nodejs20.x"
-  timeout          = 30
-  source_code_hash = data.archive_file.lambda_zip_file.output_base64sha256
+# Lambda function
+resource "aws_lambda_function" "voting_app_function" {
+  function_name = "voting_app_function"
+  role          = aws_iam_role.lambda_role.arn
+  handler       = "index.handler"
+  runtime       = "nodejs20.x"
+  filename      = "lambda/index.zip"
+  source_code_hash = filebase64sha256("lambda/index.zip")
 
   environment {
     variables = {
-      VIDEO_NAME = "Lambda Terraform Demo"
+      TABLE_NAME = aws_dynamodb_table.company.name
     }
   }
 }
 
-#2 Create API Gateway
-resource "aws_api_gateway_rest_api" "voating_api" {
-  name        = "voating-api"
-  description = "API for Demo"
-
-  endpoint_configuration {
-    types = ["REGIONAL"]
-  }
+# API Gateway REST API
+resource "aws_api_gateway_rest_api" "voting_api" {
+  name        = "VotingAPI"
+  description = "API for Voting App"
 }
 
-resource "aws_api_gateway_resource" "voating_api_resource" {
-  parent_id   = aws_api_gateway_rest_api.voating_api.root_resource_id
-  path_part   = "demo-path"
-  rest_api_id = aws_api_gateway_rest_api.voating_api.id
+# API Gateway resource
+resource "aws_api_gateway_resource" "voting_resource" {
+  rest_api_id = aws_api_gateway_rest_api.voting_api.id
+  parent_id   = aws_api_gateway_rest_api.voting_api.root_resource_id
+  path_part   = "voting"
 }
 
-/* resource "aws_api_gateway_method" "voating_method1" {
-  resource_id   = aws_api_gateway_resource.voating_api_resource.id
-  rest_api_id   = aws_api_gateway_rest_api.voating_api.id
-  http_method   = "GET"
-  authorization = "NONE"
-}
-
-resource "aws_api_gateway_integration" "lambda_integration1" {
-  http_method             = aws_api_gateway_method.voating_method.http_method
-  resource_id             = aws_api_gateway_resource.voating_api_resource.id
-  rest_api_id             = aws_api_gateway_rest_api.voating_api.id
-  integration_http_method = "GET"
-  type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.voating_lambda_function.invoke_arn
-}
-
-resource "aws_api_gateway_method_response" "voating_method_response1" {
-  rest_api_id = aws_api_gateway_rest_api.voating_api.id
-  resource_id = aws_api_gateway_resource.voating_api_resource.id
-  http_method = aws_api_gateway_method.voating_method.http_method
-  status_code = "200"
-
-  //optional for cors
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = true,
-    "method.response.header.Access-Control-Allow-Methods" = true,
-    "method.response.header.Access-Control-Allow-Origin" = true
-  }
-}
- */
-resource "aws_api_gateway_method" "voating_method" {
-  resource_id   = aws_api_gateway_resource.voating_api_resource.id
-  rest_api_id   = aws_api_gateway_rest_api.voating_api.id
+# POST method
+resource "aws_api_gateway_method" "post_method" {
+  rest_api_id   = aws_api_gateway_rest_api.voting_api.id
+  resource_id   = aws_api_gateway_resource.voting_resource.id
   http_method   = "POST"
   authorization = "NONE"
 }
 
-# Comment this block for custom response
-resource "aws_api_gateway_integration" "lambda_integration" {
-  http_method             = aws_api_gateway_method.voating_method.http_method
-  resource_id             = aws_api_gateway_resource.voating_api_resource.id
-  rest_api_id             = aws_api_gateway_rest_api.voating_api.id
+# GET method
+resource "aws_api_gateway_method" "get_method" {
+  rest_api_id   = aws_api_gateway_rest_api.voting_api.id
+  resource_id   = aws_api_gateway_resource.voting_resource.id
+  http_method   = "GET"
+  authorization = "NONE"
+}
+
+# DELETE method
+resource "aws_api_gateway_method" "delete_method" {
+  rest_api_id   = aws_api_gateway_rest_api.voting_api.id
+  resource_id   = aws_api_gateway_resource.voting_resource.id
+  http_method   = "DELETE"
+  authorization = "NONE"
+}
+
+# Lambda integration
+resource "aws_api_gateway_integration" "post_integration" {
+  rest_api_id = aws_api_gateway_rest_api.voting_api.id
+  resource_id = aws_api_gateway_resource.voting_resource.id
+  http_method = aws_api_gateway_method.post_method.http_method
+  type        = "AWS_PROXY"
   integration_http_method = "POST"
-  type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.voating_lambda_function.invoke_arn
-}
-#
-
-# Custom response [Uncomment this block for custom response]
- # Custom response start
-
-resource "aws_api_gateway_method_response" "voating_method_response" {
-  rest_api_id = aws_api_gateway_rest_api.voating_api.id
-  resource_id = aws_api_gateway_resource.voating_api_resource.id
-  http_method = aws_api_gateway_method.voating_method.http_method
-  status_code = "200"
-
-  //optional for cors
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = true,
-    "method.response.header.Access-Control-Allow-Methods" = true,
-    "method.response.header.Access-Control-Allow-Origin" = true
-  }
+  uri         = aws_lambda_function.voting_app_function.invoke_arn
 }
 
-# resource "aws_api_gateway_integration" "lambda_integration" {
-#   http_method = aws_api_gateway_method.voating_method.http_method
-#   resource_id = aws_api_gateway_resource.voating_api_resource.id
-#   rest_api_id = aws_api_gateway_rest_api.voating_api.id
-#   integration_http_method = "POST"
-#   type        = "AWS"
-#   uri = aws_lambda_function.voating_lambda_function.invoke_arn
-# }
-
-resource "aws_api_gateway_integration_response" "lambda_integration_response" {
-  rest_api_id = aws_api_gateway_rest_api.voating_api.id
-  resource_id = aws_api_gateway_resource.voating_api_resource.id
-  http_method = aws_api_gateway_method.voating_method.http_method
-  status_code = aws_api_gateway_method_response.voating_method_response.status_code
-
-  //optional for cors
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" =  "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'",
-    "method.response.header.Access-Control-Allow-Origin" = "'*'"
-  }
-
-  response_templates = {
-    "application/json" = jsonencode({"LambdaValue"="$input.path('$').body", "data" = "Custom Value"})
-  }
-
-  depends_on = [
-    aws_api_gateway_integration.lambda_integration
-  ]
+resource "aws_api_gateway_integration" "get_integration" {
+  rest_api_id = aws_api_gateway_rest_api.voting_api.id
+  resource_id = aws_api_gateway_resource.voting_resource.id
+  http_method = aws_api_gateway_method.get_method.http_method
+  type        = "AWS_PROXY"
+  integration_http_method = "POST"
+  uri         = aws_lambda_function.voting_app_function.invoke_arn
 }
 
-## Custom response end
-
-resource "aws_api_gateway_deployment" "api_deployment" {
-  rest_api_id = aws_api_gateway_rest_api.voating_api.id
-  stage_name  = "dev"
-
-  triggers = {
-    redeployment = sha1(jsonencode([
-      aws_api_gateway_resource.voating_api_resource.id,
-      aws_api_gateway_method.voating_method.id,
-      aws_api_gateway_integration.lambda_integration.id
-    ]))
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  depends_on = [
-    aws_api_gateway_integration.lambda_integration
-  ]
+resource "aws_api_gateway_integration" "delete_integration" {
+  rest_api_id = aws_api_gateway_rest_api.voting_api.id
+  resource_id = aws_api_gateway_resource.voting_resource.id
+  http_method = aws_api_gateway_method.delete_method.http_method
+  type        = "AWS_PROXY"
+  integration_http_method = "POST"
+  uri         = aws_lambda_function.voting_app_function.invoke_arn
 }
 
-resource "aws_lambda_permission" "apigw_lambda_permission" {
-  statement_id  = "AllowExecutionFromAPIGateway"
+# Lambda permission for API Gateway
+resource "aws_lambda_permission" "api_gateway_permission" {
+  statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.voating_lambda_function.function_name
+  function_name = aws_lambda_function.voting_app_function.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.voating_api.execution_arn}/*/*/*"
+  source_arn    = "${aws_api_gateway_rest_api.voting_api.execution_arn}//"
 }
 
-output "invoke_url" {
-  value = aws_api_gateway_deployment.api_deployment.invoke_url
+# API Gateway deployment
+resource "aws_api_gateway_deployment" "voting_api_deployment" {
+  depends_on = [
+    aws_api_gateway_integration.post_integration,
+    aws_api_gateway_integration.get_integration,
+    aws_api_gateway_integration.delete_integration
+  ]
+
+  rest_api_id = aws_api_gateway_rest_api.voting_api.id
+  stage_name  = "prod"
+}
+
+# Output the API endpoint
+output "api_endpoint" {
+  value = "${aws_api_gateway_deployment.voting_api_deployment.invoke_url}/voting"
 }
