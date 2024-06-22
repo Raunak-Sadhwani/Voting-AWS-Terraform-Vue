@@ -55,7 +55,7 @@ resource "aws_lambda_function" "voting_app_function" {
   handler       = "index.handler"
   runtime       = "nodejs20.x"
   filename      = "lambda/index.zip"
-  source_code_hash = filebase64sha256("lambda/index.zip")
+  source_code_hash = filebase64sha256("lambda/index.js")
 
   environment {
     variables = {
