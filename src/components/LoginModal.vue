@@ -39,24 +39,6 @@
               />
             </div>
             <div class="form-group mt-3">
-              <label for="name">CEO / CTO</label>
-              <input
-                required
-                type="text"
-                class="form-control"
-                id="name"
-                placeholder="Enter your Full name"
-                v-model.trim="name"
-                maxlength="60"
-                name="name"
-                onkeydown="return /[a-z ]/i.test(event.key)"
-                oninvalid="setCustomValidity('Invalid! Enter Full Name')"
-                oninput="setCustomValidity('')"
-                title="Enter Full Name"
-                pattern="^((\b[a-zA-Z]{2,40}\b)\s*){2,3}$"
-              />
-            </div>
-            <div class="form-group mt-3">
               <label for="phone">Phone</label>
               <input
                 required

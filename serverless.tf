@@ -54,7 +54,7 @@ resource "aws_lambda_function" "voting_app_function" {
   role             = aws_iam_role.lambda_role.arn
   handler          = "index.handler"
   runtime          = "nodejs20.x"
-  filename         = "lambda/lambda.zip"  
+  filename         = "lambda/lambda.zip"
   source_code_hash = filebase64sha256("lambda/lambda.zip")
 
   environment {
@@ -82,8 +82,7 @@ resource "aws_api_gateway_method" "post_method" {
   rest_api_id   = aws_api_gateway_rest_api.voting_api.id
   resource_id   = aws_api_gateway_resource.voting_resource.id
   http_method   = "POST"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.apigw_authorizer.id
+  authorization = "NONE"
 }
 
 # GET method
@@ -91,8 +90,7 @@ resource "aws_api_gateway_method" "get_method" {
   rest_api_id   = aws_api_gateway_rest_api.voting_api.id
   resource_id   = aws_api_gateway_resource.voting_resource.id
   http_method   = "GET"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.apigw_authorizer.id
+  authorization = "NONE"
 }
 
 # DELETE method
@@ -100,8 +98,7 @@ resource "aws_api_gateway_method" "delete_method" {
   rest_api_id   = aws_api_gateway_rest_api.voting_api.id
   resource_id   = aws_api_gateway_resource.voting_resource.id
   http_method   = "DELETE"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.apigw_authorizer.id
+  authorization = "NONE"
 }
 
 # Lambda integration
@@ -198,4 +195,3 @@ resource "local_file" "config_js" {
   EOF
   filename = "${path.module}/public/config.js"
 }
-
