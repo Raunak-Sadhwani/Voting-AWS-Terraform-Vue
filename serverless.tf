@@ -182,18 +182,26 @@ resource "aws_api_gateway_integration_response" "voting_integration_response" {
   ]
 }
 
-
 # Output the API endpoint
 output "api_endpoint" {
   value = "${aws_api_gateway_deployment.voting_api_deployment.invoke_url}/voting"
 }
 
-resource "null_resource" "update_env" {
-  provisioner "local-exec" {
-    command = "update_env.bat"
-  }
+resource "local_file" "config_js" {
+  content  = <<-EOF
+    window.config = {
+      API_ENDPOINT: "${aws_api_gateway_deployment.voting_api_deployment.invoke_url}/voting"
+    };
+  EOF
+  filename = "${path.module}/public/config.js"
+}
 
-  triggers = {
-    api_endpoint = aws_api_gateway_deployment.voting_api_deployment.invoke_url
+# Ensure the local_file resource is created after the API is deployed
+resource "null_resource" "config_file" {
+  depends_on = [
+    aws_api_gateway_deployment.voting_api_deployment
+  ]
+  provisioner "local-exec" {
+    command = "cp ${local_file.config_js.filename} public/config.js"
   }
 }

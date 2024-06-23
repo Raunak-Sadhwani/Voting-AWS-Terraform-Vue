@@ -336,12 +336,10 @@ export default {
   },
   methods: {
     async getData() {
-      const response = await fetch(
-        "https://gj8dtjc8w9.execute-api.us-east-1.amazonaws.com/prod/voting"
-      );
+      const response = await fetch(apiEndpoint);
       const data = await response.json();
       console.log(data);
-      this.name = data[1].name;
+      this.name = data[0].name;
     },
   },
 };
