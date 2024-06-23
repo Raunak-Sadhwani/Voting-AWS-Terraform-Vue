@@ -199,12 +199,3 @@ resource "local_file" "config_js" {
   filename = "${path.module}/public/config.js"
 }
 
-# Ensure the local_file resource is created after the API is deployed
-resource "null_resource" "config_file" {
-  depends_on = [
-    aws_api_gateway_deployment.voting_api_deployment
-  ]
-  provisioner "local-exec" {
-    command = "cp ${local_file.config_js.filename} public/config.js"
-  }
-}
