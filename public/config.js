@@ -1,4 +1,3 @@
 window.config = {
-    API_ENDPOINT: 'https://38nf94bzl8.execute-api.us-east-1.amazonaws.com/prod/voting' // This will be replaced by Terraform
-  };
-  
+  API_ENDPOINT: "https://p5spyf97xj.execute-api.us-east-1.amazonaws.com/prod/voting"
+};
