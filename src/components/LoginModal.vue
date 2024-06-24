@@ -13,19 +13,14 @@
         <div class="modal-header flex justify-content-between">
           <div class="d-flex">
             <h5 class="modal-title" id="exampleModalLabel2">
-              {{ login ? "Login" : "Register" }}
+              Vote for your favorite member ({{ selectedName }})
             </h5>
           </div>
-          <div class="d-flex">
-            <button type="button" class="btn btn-primary" @click="login = !login">
-              {{ login ? "Register" : "Login" }}
-            </button>
-          </div>
         </div>
-        <div class="modal-body" v-if="!login">
+        <div class="modal-body">
           <form action="" method="post" id="voteForm">
             <div class="form-group mt-3">
-              <label for="name">Company Name</label>
+              <label for="name">Your legal name</label>
               <input
                 required
                 type="text"
@@ -36,22 +31,6 @@
                 placeholder="Enter your company name"
                 oninvalid="setCustomValidity('Enter Valid Company Name!')"
                 oninput="setCustomValidity('')"
-              />
-            </div>
-            <div class="form-group mt-3">
-              <label for="phone">Phone</label>
-              <input
-                required
-                type="text"
-                v-model="phone"
-                class="form-control"
-                id="phone"
-                pattern="[0-9]{10, 12}"
-                onkeypress="return /[0-9]/i.test(event.key) || event.key === 'Backspace'"
-                oninvalid="setCustomValidity('Invalid! Enter Correct Phone Number')"
-                oninput="setCustomValidity('')"
-                placeholder="Enter your Phone number"
-                inputmode="numeric"
               />
             </div>
             <div class="form-group mt-3">
@@ -66,45 +45,6 @@
                 class="form-control"
                 id="email"
                 placeholder="Enter your Email"
-              />
-            </div>
-            <div class="form-group mt-3">
-              <label for="password">Password</label>
-              <input
-                required
-                type="password"
-                class="form-control"
-                id="password"
-                v-model="password"
-                placeholder="Enter your password"
-              />
-            </div>
-            <input type="submit" id="submit-form" style="display: none" />
-          </form>
-        </div>
-        <div class="modal-body" v-else>
-          <form action="" method="post" id="voteForm">
-            <div class="form-group mt-3">
-              <label for="name">Email</label>
-              <input
-                required
-                type="text"
-                pattern="[^@\s]{2,}@[^@\s]{2,}\.[^@\s]{2,}"
-                class="form-control"
-                v-model.trim="email"
-                id="email"
-                placeholder="Enter your registered email"
-              />
-            </div>
-            <div class="form-group mt-3">
-              <label for="password">Password</label>
-              <input
-                required
-                type="password"
-                v-model="password"
-                class="form-control"
-                id="password"
-                placeholder="Enter your password"
               />
             </div>
             <input type="submit" id="submit-form" style="display: none" />
@@ -126,6 +66,9 @@
 
 <script>
 export default {
+  props: {
+    selectedName: String,
+  },
   data() {
     return {
       login: false,
@@ -136,6 +79,7 @@ export default {
       password: "",
     };
   },
+  methods: {},
 };
 </script>
 

@@ -24,7 +24,7 @@
               <!-- <li class="float-md-start px-4 pe-1 py-3">
                                     <button class="btn fw-bold fs-8 btn-outline-primary px-5">Login</button>
                                 </li> -->
-              <li class="float-md-start px-4 pe-1 py-3">
+              <!-- <li class="float-md-start px-4 pe-1 py-3">
                 <button
                   class="btn fw-bold fs-8 btn-primary"
                   data-bs-toggle="modal"
@@ -32,7 +32,7 @@
                 >
                   Register your company
                 </button>
-              </li>
+              </li> -->
             </ul>
           </div>
         </div>

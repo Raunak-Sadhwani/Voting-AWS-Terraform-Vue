@@ -1,15 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { defineAsyncComponent } from "vue";
+import store from "./store.js";
 const AdminPage = defineAsyncComponent(() => import("./pages/AdminPage.vue"));
 const AdminUserPage = defineAsyncComponent(() =>
   import("./pages/admin/AdminUserPage.vue")
 );
-const AdminDashboardPage = defineAsyncComponent(() =>
-  import("./pages/admin/AdminDashboardPage.vue")
+const AdminLoginPage = defineAsyncComponent(() =>
+  import("./pages/admin/AdminLoginPage.vue")
 );
-const AdminVotingPage = defineAsyncComponent(() =>
-  import("./pages/admin/AdminVotingPage.vue")
-);
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -24,33 +23,22 @@ const router = createRouter({
     },
     {
       path: "/admin",
-      redirect: { name: "adminDashboard" },
+      redirect: { name: "adminUser" },
       name: "admin",
-      meta: {
-        // requiresAdminUnauth: true,
-      },
       component: AdminPage,
       children: [
         {
-          path: "dashboard",
-          name: "adminDashboard",
-          component: AdminDashboardPage,
+          path: "login",
+          name: "adminLogin",
+          component: AdminLoginPage,
           meta: {
-            requiresAdminAuth: true,
+            requiresAdminUnauth: true,
           },
         },
         {
-          path: "staff",
+          path: "voters",
           name: "adminUser",
           component: AdminUserPage,
-          meta: {
-            requiresAdminAuth: true,
-          },
-        },
-        {
-          path: "voting",
-          name: "voting",
-          component: AdminVotingPage,
           meta: {
             requiresAdminAuth: true,
           },
@@ -62,22 +50,32 @@ const router = createRouter({
         },
       ],
     },
-    // {
-    //   path: "/:id",
-    //   component: () => import("./pages/ChatUI.vue"),
-    //   props: true,
-    // },
-    // {
-    //   name: "about",
-    //   path: "/about",
-    //   component: () => import("./pages/AboutMe.vue"),
-    // },
     {
       path: "/:pathMatch(.*)*",
       name: "not-found",
       component: () => import("./pages/NotFound.vue"),
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const admin = store.getters.adminAuth;
+// if admin is not authenticated, then push to login page, else go to voters page
+  if (to.matched.some((record) => record.meta.requiresAdminAuth)) {
+    if (!admin) {
+      next({ name: "adminLogin" });
+    }  else {
+      next();
+    }
+  } else if (to.matched.some((record) => record.meta.requiresAdminUnauth)) {
+    if (admin) {
+      next({ name: "adminUser" });
+    }  else {
+      next();
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;

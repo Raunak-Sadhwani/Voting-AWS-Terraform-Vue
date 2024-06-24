@@ -1,42 +1,56 @@
-const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
-
-const poolData = {
-  UserPoolId: process.env.USER_POOL_ID,
-  ClientId: process.env.CLIENT_ID
-};
-
-const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+const AWS = require('aws-sdk');
+const cognito = new AWS.CognitoIdentityServiceProvider();
 
 exports.handler = async (event) => {
-  const { username, password } = JSON.parse(event.body);
+    console.log('Received event:', JSON.stringify(event, null, 2));
 
-  const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
-    Username: username,
-    Password: password,
-  });
+    let body;
+    if (event.body) {
+        body = JSON.parse(event.body);
+    } else {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({
+                message: "Missing request body"
+            })
+        };
+    }
 
-  const userData = {
-    Username: username,
-    Pool: userPool,
-  };
+    const { username, password } = body;
 
-  const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+    if (!username || !password) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({
+                message: "Username and password are required"
+            })
+        };
+    }
 
-  return new Promise((resolve, reject) => {
-    cognitoUser.authenticateUser(authenticationDetails, {
-      onSuccess: function(result) {
-        const accessToken = result.getAccessToken().getJwtToken();
-        resolve({
-          statusCode: 200,
-          body: JSON.stringify({ token: accessToken }),
-        });
-      },
-      onFailure: function(err) {
-        reject({
-          statusCode: 401,
-          body: JSON.stringify({ message: err.message }),
-        });
-      },
-    });
-  });
+    const params = {
+        AuthFlow: 'ADMIN_NO_SRP_AUTH',
+        UserPoolId: process.env.USER_POOL_ID,
+        ClientId: process.env.CLIENT_ID,
+        AuthParameters: {
+            USERNAME: username,
+            PASSWORD: password
+        }
+    };
+
+    try {
+        const response = await cognito.adminInitiateAuth(params).promise();
+        return {
+            statusCode: 200,
+            body: JSON.stringify(response)
+        };
+    } catch (error) {
+        console.error('Error initiating auth:', error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({
+                message: "Error initiating auth",
+                error: error.message
+            })
+        };
+    }
 };

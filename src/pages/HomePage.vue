@@ -4,172 +4,47 @@
 
     <div class="container-xl big-padding">
       <div class="row section-title">
-        <h2 class="fs-4">{{ name }}</h2>
+        <h2 class="fs-4">{{ company.name }}</h2>
         <p>
-          The below are the sample candidates running for the post of President in the XYZ
-          Company. <br />
-          Please register your own company account with us to get started and make your
-          own voting system.
+          {{ company.description }}
         </p>
       </div>
       <div class="row">
-        <div class="col-lg-4 col-md-6">
+        <div
+          class="col-lg-4 col-md-6"
+          v-for="user in company.users"
+          :key="company.company_id"
+        >
           <div class="text-white text-center mb-4 votcard shadow-md bg-white p-4 pt-5">
             <img
               class="rounded-pill shadow-md p-2"
               src="../assets/images/testimonial/member-01.jpg"
               alt=""
             />
-            <h4 class="mt-3 fs-5 mb-1 fw-bold">James Anderson</h4>
+            <h4 class="mt-3 fs-5 mb-1 fw-bold">{{ user.user_name }}</h4>
             <h6 class="fs-7">
-              Running to Be: <span class="text-primary fw-bold">President</span>
+              Running to Be:
+              <span class="text-primary fw-bold">{{ company.voting_role }}</span>
             </h6>
             <p class="text-dark mt-3 mb-3 fs-8">
-              Aliquam utrum nibh rutrum nibh vitae tortor dapibus egestas. Cras
-              condimentum dapibus tellus vel semper. Quisque vel dui molestie est auctor
-              utrum nibh porttitor.
+              {{ company.description }}
             </p>
             <button
               data-bs-toggle="modal"
               data-bs-target="#exampleModal"
               class="btn btn-primary fw-bolder fs-8"
+              @click="manifestoButton(user.user_id)"
             >
               View Manifesto
             </button>
-            <button class="btn btn-danger fw-bolder px-4 ms-2 fs-8">Vote</button>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="text-white text-center mb-4 votcard shadow-md bg-white p-4 pt-5">
-            <img
-              class="rounded-pill shadow-md p-2"
-              src="../assets/images/testimonial/member-02.jpg"
-              alt=""
-            />
-            <h4 class="mt-3 fs-5 mb-1 fw-bold">Arun Kumar</h4>
-            <h6 class="fs-7">
-              Running to Be: <span class="text-primary fw-bold">President</span>
-            </h6>
-            <p class="text-dark mt-3 mb-3 fs-8">
-              Aliquam utrum nibh rutrum nibh vitae tortor dapibus egestas. Cras
-              condimentum dapibus tellus vel semper. Quisque vel dui molestie est auctor
-              utrum nibh porttitor.
-            </p>
             <button
+              @click="voteButton(user.user_id)"
               data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-              class="btn btn-primary fw-bolder fs-8"
+              data-bs-target="#exampleModal2"
+              class="btn btn-danger fw-bolder px-4 ms-2 fs-8"
             >
-              View Manifesto
+              Vote
             </button>
-            <button class="btn btn-danger fw-bolder px-4 ms-2 fs-8">Vote</button>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="text-white text-center mb-4 votcard shadow-md bg-white p-4 pt-5">
-            <img
-              class="rounded-pill shadow-md p-2"
-              src="../assets/images/testimonial/member-03.jpg"
-              alt=""
-            />
-            <h4 class="mt-3 fs-5 mb-1 fw-bold">Pream Nath</h4>
-            <h6 class="fs-7">
-              Running to Be: <span class="text-primary fw-bold">President</span>
-            </h6>
-            <p class="text-dark mt-3 mb-3 fs-8">
-              Aliquam utrum nibh rutrum nibh vitae tortor dapibus egestas. Cras
-              condimentum dapibus tellus vel semper. Quisque vel dui molestie est auctor
-              utrum nibh porttitor.
-            </p>
-            <button
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-              class="btn btn-primary fw-bolder fs-8"
-            >
-              View Manifesto
-            </button>
-            <button class="btn btn-danger fw-bolder px-4 ms-2 fs-8">Vote</button>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6">
-          <div class="text-white text-center mb-4 votcard shadow-md bg-white p-4 pt-5">
-            <img
-              class="rounded-pill shadow-md p-2"
-              src="../assets/images/testimonial/member-04.jpg"
-              alt=""
-            />
-            <h4 class="mt-3 fs-5 mb-1 fw-bold">Reena Anath</h4>
-            <h6 class="fs-7">
-              Running to Be: <span class="text-primary fw-bold">President</span>
-            </h6>
-            <p class="text-dark mt-3 mb-3 fs-8">
-              Aliquam utrum nibh rutrum nibh vitae tortor dapibus egestas. Cras
-              condimentum dapibus tellus vel semper. Quisque vel dui molestie est auctor
-              utrum nibh porttitor.
-            </p>
-            <button
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-              class="btn btn-primary fw-bolder fs-8"
-            >
-              View Manifesto
-            </button>
-            <button class="btn btn-danger fw-bolder px-4 ms-2 fs-8">Vote</button>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6">
-          <div class="text-white text-center mb-4 votcard shadow-md bg-white p-4 pt-5">
-            <img
-              class="rounded-pill shadow-md p-2"
-              src="../assets/images/testimonial/member-05.png"
-              alt=""
-            />
-            <h4 class="mt-3 fs-5 mb-1 fw-bold">Allen Shory</h4>
-            <h6 class="fs-7">
-              Running to Be: <span class="text-primary fw-bold">President</span>
-            </h6>
-            <p class="text-dark mt-3 mb-3 fs-8">
-              Aliquam utrum nibh rutrum nibh vitae tortor dapibus egestas. Cras
-              condimentum dapibus tellus vel semper. Quisque vel dui molestie est auctor
-              utrum nibh porttitor.
-            </p>
-            <button
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-              class="btn btn-primary fw-bolder fs-8"
-            >
-              View Manifesto
-            </button>
-            <button class="btn btn-danger fw-bolder px-4 ms-2 fs-8">Vote</button>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6">
-          <div class="text-white text-center mb-4 votcard shadow-md bg-white p-4 pt-5">
-            <img
-              class="rounded-pill shadow-md p-2"
-              src="../assets/images/testimonial/member-06.png"
-              alt=""
-            />
-            <h4 class="mt-3 fs-5 mb-1 fw-bold">Vimal kumar</h4>
-            <h6 class="fs-7">
-              Running to Be: <span class="text-primary fw-bold">President</span>
-            </h6>
-            <p class="text-dark mt-3 mb-3 fs-8">
-              Aliquam utrum nibh rutrum nibh vitae tortor dapibus egestas. Cras
-              condimentum dapibus tellus vel semper. Quisque vel dui molestie est auctor
-              utrum nibh porttitor.
-            </p>
-            <button
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-              class="btn btn-primary fw-bolder fs-8"
-            >
-              View Manifesto
-            </button>
-            <button class="btn btn-danger fw-bolder px-4 ms-2 fs-8">Vote</button>
           </div>
         </div>
       </div>
@@ -220,7 +95,7 @@
               src="../assets/images/aditya.jpg"
               alt=""
             />
-            <h4 class="mt-3 fs-5 mb-1 fw-bold">Adi Gawade</h4>
+            <h4 class="mt-3 fs-5 mb-1 fw-bold">Aditya Gawade</h4>
             <h6 class="fs-7">
               Role: <span class="text-danger fw-bold">Backend Developer</span>
             </h6>
@@ -272,48 +147,13 @@
           </div>
           <div class="modal-body">
             <ul class="molist">
-              <li>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu nibh et
-                felis interdum accumsan. Pellentesque elit odio, interdum quis ante in,
-                varius rhoncus orci.
-              </li>
-              <li>
-                Etiam laoreet dapibus ante at mollis. Morbi lobortis ultricies risus, in
-                faucibus est blandit eu. Nunc nec imperdiet elit.
-              </li>
-              <li>
-                Praesent eget massa finibus, placerat tortor sed, pretium justo. Aenean et
-                lectus accumsan, tincidunt metus sit amet, laoreet nunc.
-              </li>
-              <li>
-                In et tincidunt est. Sed neque sapien, ultricies a orci et, fringilla
-                egestas nibh. Sed luctus eros et erat suscipit fermentum.
-              </li>
-              <li>
-                Cras blandit orci quis purus placerat tincidunt. Nunc ullamcorper iaculis
-                nibh, sed dapibus dui lobortis nec.
-              </li>
-              <li>
-                Sed tristique ante ac rhoncus facilisis. Maecenas hendrerit velit a
-                interdum convallis. Vivamus tempus eu justo nec rutrum. Praesent
-                sollicitudin interdum nisl, at sollicitudin justo interdum vel
-              </li>
-              <li>
-                Pellentesque habitant morbi tristique senectus et netus et malesuada fames
-                ac turpis egestas. Nunc eget orci maximus, tincidunt nulla molestie, porta
-                nisi. Integer fringilla lorem at lacinia iaculis.
-              </li>
-              <li>
-                Maecenas tempus libero laoreet est facilisis, vitae iaculis dui eleifend.
-                Proin eget magna vitae diam dictum interdum at at nulla. Fusce eu
-                porttitor felis. Aenean pretium lacinia nunc ut convallis.
-              </li>
+              <li v-for="line in manifesto.split('\n')" :key="line">{{ line }}</li>
             </ul>
           </div>
         </div>
       </div>
     </div>
-    <LoginModal />
+    <LoginModal :selected-name="selectedName"/>
   </section>
 </template>
 
@@ -327,19 +167,29 @@ export default {
   },
   data() {
     return {
+      selectedName: "",
       name: "",
       apiEndpoint: import.meta.env.VITE_API_ENDPOINT,
+      manifesto: "",
     };
   },
+  computed: {
+    company() {
+      return this.$store.getters.getCompany;
+    },
+  },
   mounted() {
-    this.getData();
+
   },
   methods: {
-    async getData() {
-      const response = await fetch(apiEndpoint);
-      const data = await response.json();
-      console.log(data);
-      this.name = data[0].name;
+    
+    voteButton(id) {
+      this.selectedName = this.company.users.find((user) => user.user_id === id)
+        .user_name;
+    },
+    manifestoButton(id) {
+      this.manifesto = this.company.users.find((user) => user.user_id === id)
+        .user_manifesto;
     },
   },
 };

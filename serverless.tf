@@ -192,6 +192,7 @@
 #     window.config = {
 #       API_ENDPOINT: "${aws_api_gateway_deployment.voting_api_deployment.invoke_url}/voting"
 #     };
+#    export default window.config;
 #   EOF
 #   filename = "${path.module}/public/config.js"
 # }

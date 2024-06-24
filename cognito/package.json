@@ -1,5 +1,5 @@
 {
-  "name": "lambda",
+  "name": "cognito",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "amazon-cognito-identity-js": "^6.3.12",
     "aws-sdk": "^2.1646.0"
   }
 }

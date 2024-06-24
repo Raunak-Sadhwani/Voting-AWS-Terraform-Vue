@@ -1,12 +1,12 @@
 <template>
-  <!-- <LoginPage v-if="isDesktop && !adminAuth" /> -->
   <section v-if="isDesktop">
-    <base-spinner v-if="updating" />
+    <BaseSpinner v-if="updating"/>
     <base-dialog :show="!!authError" title="Something Happened" @close="handleError">
       <p>{{ authMessage }}</p>
     </base-dialog>
     <!-- <transition name="fadeIn"> </transition> -->
     <TheSidebar
+      v-if="adminAuth"
       :isSearch="false"
       :profileRole="''"
       :profileName="user.Name"
@@ -41,12 +41,12 @@
 // import logo from "../assets/logo.png";
 import { mapGetters } from "vuex";
 import TheSidebar from "../components/TheSidebar.vue";
-// import LoginPage from "./admin/LoginPage.vue";
+import BaseSpinner from "../components/BaseSpinner.vue";
+import BaseDialog from "../components/BaseDialog.vue";
 
 export default {
   components: {
     TheSidebar,
-    // LoginPage,
   },
 
   created() {
@@ -54,27 +54,18 @@ export default {
     window.document.body.style.backgroundColor = "#e3e3e3";
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
+    const token = localStorage.getItem("token");
+    if (token) {
+      this.$store.dispatch("auth", token);
+    }
   },
   unmounted() {
     window.removeEventListener("resize", this.handleResize);
   },
-  //   watch route changes
-  //   computed: {
-  //     ...mapGetters([
-  //       "authError",
-  //       "authMessage",
-  //       "token",
-  //       "adminAuth",
-  //       "host",
-  //       "hide",
-  //       "newUrl",
-  //       "updating",
-  //     ]),
+  computed: {
+    ...mapGetters(["authError", "authMessage", "adminAuth", "updating"]),
+  },
 
-  //     menuLogo() {
-  //       return null;
-  //     },
-  //   },
   data() {
     return {
       menu: false,
@@ -82,22 +73,10 @@ export default {
       isDesktop: true,
       menuItems: [
         {
-          link: "dashboard",
-          name: "Overview",
-          tooltip: "Overview",
-          icon: "bx-grid-alt",
-        },
-        {
-          link: "staff",
-          name: "Staff",
-          tooltip: "Staff",
+          link: "voters",
+          name: "Voters",
+          tooltip: "Voters",
           icon: "bx-group",
-        },
-        {
-          link: "voting",
-          name: "Voting",
-          tooltip: "Voting",
-          icon: "bx-user-check",
         },
       ],
     };
