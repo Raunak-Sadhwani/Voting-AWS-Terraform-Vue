@@ -186,5 +186,3 @@ output "api_endpointxx" {
 }
 
 
-
-# Aditya is my name
