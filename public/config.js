@@ -1,3 +1,3 @@
 window.config = {
-  API_ENDPOINT: "https://p5spyf97xj.execute-api.us-east-1.amazonaws.com/prod/voting"
+  API_ENDPOINT: "https://cj1rm0egfa.execute-api.us-east-1.amazonaws.com/prod/voting"
 };
