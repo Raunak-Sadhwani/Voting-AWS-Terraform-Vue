@@ -91,9 +91,10 @@ resource "aws_lambda_function" "example_lambda" {
   runtime          = "nodejs20.x"
   filename         = "cognito/cognito.zip"
   source_code_hash = filebase64sha256("cognito/cognito.zip")
-  function_name = "example_lambda_function"
+  function_name = "example_lambda"
   role          = aws_iam_role.lambda_rolex.arn
   handler       = "index.handler"
+   timeout       = 30 
 
   environment {
     variables = {
@@ -139,6 +140,7 @@ resource "aws_lambda_permission" "apigw_lambda_permission" {
 
   source_arn = "${aws_api_gateway_rest_api.example_api.execution_arn}/*/*"
 }
+
 
 resource "aws_api_gateway_deployment" "example_deployment" {
   depends_on = [
