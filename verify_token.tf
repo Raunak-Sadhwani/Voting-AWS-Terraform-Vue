@@ -90,7 +90,7 @@ resource "aws_api_gateway_integration_response" "votingx_verify_integration_resp
 
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-    "method.response.header.Access-Control-Allow-Methods" = "'POST,GET,OPTIONS,DELETE,PUT'"
+    "method.response.header.Access-Control-Allow-Methods" = "'POST'"
     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
   }
 
