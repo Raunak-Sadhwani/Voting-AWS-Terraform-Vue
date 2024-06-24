@@ -200,3 +200,5 @@ resource "aws_cognito_user" "votingx_user" {
 output "api_endpoint_login" {
   value = "${aws_api_gateway_deployment.votingx_deployment.invoke_url}/login"
 }
+
+
