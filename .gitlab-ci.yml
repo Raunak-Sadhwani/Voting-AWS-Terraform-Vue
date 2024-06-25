@@ -50,10 +50,11 @@ build:
     - npm install -g npm@latest
     - npm ci
   script:
-    - npm run build
     - terraform init
     - terraform plan
-    - terraform apply -auto-approve
+    - terraform apply -auto-approve || terraform apply -auto-approve
+    - npm run build
+    - terraform apply -auto-approve || terraform apply -auto-approve
   artifacts:
     paths:
       - dist/
