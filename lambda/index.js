@@ -170,8 +170,10 @@ const _deleteItem = async (id) => {
 const _responseHelper = (statusCode, payload) => {
     return {
         "statusCode": statusCode,
-        "headers": {
-            "Access-Control-Allow-Origin": "*"
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': '*',
+            'Access-Control-Allow-Methods': '*'
         },
         "body": payload
     };
