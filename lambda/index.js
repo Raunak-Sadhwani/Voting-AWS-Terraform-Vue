@@ -105,10 +105,21 @@ const _deleteItem = async (id) => {
                 if (tableName.startsWith("voter")){
                     name = "voter_id";
 
-                    const votedForId = id;
+                    const voterId = id;
                     const companyTableName = "CompanyTable";
 
                     try {
+                        // get the voted_for_id
+                        const oParams = {
+                            TableName: tableName,
+                            Key: {
+                                'voter_id': voterId
+                            }
+                        };
+                        const responsex = await ddc.get(oParams).promise();
+                        const votedForId = responsex.Item.voted_for_id;
+
+
                         // Get the company from CompanyTable
                         const compParams = {
                             TableName: companyTableName,
