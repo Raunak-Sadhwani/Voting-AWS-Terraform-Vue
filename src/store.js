@@ -1,7 +1,7 @@
 import { createStore } from "vuex";
 // get config.js
 
-import  config  from "../public/config";
+import  config  from "./config";
 const store = createStore({
   state: {
     adminAuth: false,
@@ -16,7 +16,7 @@ const store = createStore({
       // set updating
       console.log(context.getters.host);
       context.commit("setUpdating", true);
-      const resp = await fetch(`https://4te75mf9x8.execute-api.us-east-1.amazonaws.com/prod/voting`, {
+      const resp = await fetch(`https://1kr1ifban0.execute-api.us-east-1.amazonaws.com/prod/voting`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -38,7 +38,7 @@ const store = createStore({
     async login(context, userdata) {
       // set updating
       context.commit("setUpdating", true);
-      const resp = await fetch(`https://3a07too316.execute-api.us-east-1.amazonaws.com/prod/login/`, {
+      const resp = await fetch(`https://3uir59f5xc.execute-api.us-east-1.amazonaws.com/prod/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,7 +62,7 @@ const store = createStore({
     async auth(context, token) {
       // set updating
       context.commit("setUpdating", true);
-      const resp = await fetch(`https://3a07too316.execute-api.us-east-1.amazonaws.com/prod/verify-token`, {
+      const resp = await fetch(`https://3uir59f5xc.execute-api.us-east-1.amazonaws.com/prod/verify-token`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
