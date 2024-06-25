@@ -17,12 +17,10 @@ const store = createStore({
       console.log(context.getters.host);
       context.commit("setUpdating", true);
       const resp = await fetch(`https://1kr1ifban0.execute-api.us-east-1.amazonaws.com/prod/voting`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+       
       });
       const data = await resp.json();
+      console.log(data);
       // check response code
       if (resp.status !== 200) {        
         const payload = {
@@ -31,7 +29,7 @@ const store = createStore({
         }
         context.commit("setAuthError", payload);
       } else {
-        context.commit("setCompany", data);
+        context.commit("setCompany", data[0]);
       }
       context.commit("setUpdating", false);
     },
