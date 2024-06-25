@@ -16,6 +16,7 @@
       :is-menu-open="menu"
       :menu-items="menuItems"
       @update:is-menu-open="updateIsMenuOpen"
+      
     />
     <div
       :style="{ paddingLeft: menu ? '280px' : '100px', transition: 'padding-left 0.5s' }"

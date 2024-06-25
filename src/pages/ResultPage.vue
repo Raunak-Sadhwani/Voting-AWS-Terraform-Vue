@@ -5,34 +5,29 @@
     <div class="container py-5 big-padding">
       <div class="row section-title">
         <h2 class="fs-5 text-center">XYZ Company Voting Result</h2>
-        <p>
-          The below chart shows the voting results of the XYZ company. <br />
-        </p>
+        <p>The below chart shows the voting results of the XYZ company. <br /></p>
       </div>
       <div class="row mb-5">
         <div class="col-md-6 mb-4" v-for="user in company.users" :key="user.company_id">
           <div class="row shado-md p-2 m-0 rounded shadow-md bg-white">
             <div class="col-md-3">
-              <img
-                class="rounded-pill max-130 p-2"
-                src="../assets/images/testimonial/member-01.jpg"
-                alt=""
-              />
+              <img class="rounded-pill max-130 p-2" :src="user.user_image" alt="" />
             </div>
             <div class="col-md-9 align-self-center">
               <h4 class="mt-3 fs-5 mb-1 fw-bold">{{ user.user_name }}</h4>
               <p class="fs-8 mb-2 fw-bold">Votes : {{ user.user_votes }}</p>
               <div class="progress">
                 <div
-                  class="progress-bar bg-danger"
+                  class="progress-bar"
                   role="progressbar"
+                  :class="getProgressBarColor(calculatePercentage(user.user_votes))"
+                  :aria-valuenow="calculatePercentage(user.user_votes)"
                   aria-label="Example with label"
-                  style="width: 30%"
-                  aria-valuenow="30"
+                  :style="{ width: (calculatePercentage(user.user_votes) == 0 ? '10' : calculatePercentage(user.user_votes)) + '%' }"
                   aria-valuemin="0"
                   aria-valuemax="100"
                 >
-                30%
+                  {{ calculatePercentage(user.user_votes) }}%
                 </div>
               </div>
             </div>
@@ -132,9 +127,33 @@ export default {
     TheHeader,
     LoginModal,
   },
+  created() {
+    this.$store.dispatch("getCompany");
+
+  },
   computed: {
+    totalVotes() {
+      return this.$store.getters.getCompany.users.reduce(
+        (total, user) => total + user.user_votes,
+        0
+      );
+    },
     company() {
       return this.$store.getters.getCompany;
+    },
+  },
+  methods: {
+    calculatePercentage(votes) {
+      return this.totalVotes ? ((votes / this.totalVotes) * 100).toFixed(0) : 0;
+    },
+    getProgressBarColor(percentage) {
+      if (percentage < 33) {
+        return "bg-danger"; // Red for low percentage
+      } else if (percentage < 66) {
+        return "bg-warning"; // Yellow for medium percentage
+      } else {
+        return "bg-success"; // Green for high percentage
+      }
     },
   },
 };

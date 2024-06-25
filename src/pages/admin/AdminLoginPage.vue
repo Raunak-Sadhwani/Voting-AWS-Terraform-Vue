@@ -12,7 +12,7 @@
           </div>
           <br />
           <form action="POST" @submit.prevent="subForm">
-            <input type="text" placeholder="username" v-model="email" required />
+            <input type="text" placeholder="username" v-model="username" required />
             <br />
             <input type="password" placeholder="password" v-model="password" required />
             <br />
@@ -36,7 +36,7 @@ export default {
   },
   data() {
     return {
-      email: null,
+      username: null,
       password: null,
     };
   },
@@ -56,17 +56,13 @@ export default {
     async subForm() {
       const user = {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
-          Email: this.email,
-          Password: this.password,
+          username: this.username,
+          password: this.password,
         }),
       };
       try {
         await this.$store.dispatch("login", user);
-        this.$router.push({ name: "adminUser" });
       } catch (err) {
         const authErr = {
           message: err.message || "Something went wrong",

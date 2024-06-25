@@ -62,13 +62,13 @@ router.beforeEach((to, from, next) => {
   const admin = store.getters.adminAuth;
 // if admin is not authenticated, then push to login page, else go to voters page
   if (to.matched.some((record) => record.meta.requiresAdminAuth)) {
-    if (!admin) {
+    if (!admin && !localStorage.getItem("token")) {
       next({ name: "adminLogin" });
     }  else {
       next();
     }
   } else if (to.matched.some((record) => record.meta.requiresAdminUnauth)) {
-    if (admin) {
+    if (admin || localStorage.getItem("token")) {
       next({ name: "adminUser" });
     }  else {
       next();

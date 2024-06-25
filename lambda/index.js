@@ -44,6 +44,42 @@ const _postData = async (oRequestData) => {
         TableName: tableName,
         Item: oRequestData
     };
+    if (tableName.startsWith("voter")){
+        const userx = oParams.Item.voted_for_id;
+        const tabName= "companyTable";
+        // get the user in companyTable
+        // add one to the vote count of company users
+        const getUserParams = {
+            TableName: tabName,
+            Key: {
+                user_id: userx
+            },
+        };
+        try {
+            const userResult = await ddc.get(getUserParams).promise();
+            if (userResult.Item) {
+                // Increment the vote count
+                const updatedVotes = userResult.Item.user_votes + 1;
+
+                // Update the user vote count in the company table
+                const updateUserParams = {
+                    TableName: companyTable,
+                    Key: {
+                        'user_id': userx
+                    },
+                    UpdateExpression: 'set user_votes = :votes',
+                    ExpressionAttributeValues: {
+                        ':votes': updatedVotes
+                    }
+                };
+                await ddc.update(updateUserParams).promise();
+            } else {
+                throw new Error("User not found");
+            }
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
     try {
         await ddc.put(oParams).promise();
     } catch (error) {

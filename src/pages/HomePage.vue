@@ -16,11 +16,7 @@
           :key="company.company_id"
         >
           <div class="text-white text-center mb-4 votcard shadow-md bg-white p-4 pt-5">
-            <img
-              class="rounded-pill shadow-md p-2"
-              src="../assets/images/testimonial/member-01.jpg"
-              alt=""
-            />
+            <img class="rounded-pill shadow-md p-2" :src="user.user_image" alt="" />
             <h4 class="mt-3 fs-5 mb-1 fw-bold">{{ user.user_name }}</h4>
             <h6 class="fs-7">
               Running to Be:
@@ -39,7 +35,7 @@
             </button>
             <button
               @click="voteButton(user.user_id)"
-              data-bs-toggle="modal"
+              :data-bs-toggle="alreadyVote ? '' : 'modal'"
               data-bs-target="#exampleModal2"
               class="btn btn-danger fw-bolder px-4 ms-2 fs-8"
             >
@@ -153,23 +149,40 @@
         </div>
       </div>
     </div>
-    <LoginModal :selected-name="selectedName" />
+    <LoginModal :selected-id="selectedId" :selected-name="selectedName" @close="showDialog = true" />
+    <BaseDialog
+      :show="showDialog"
+      :title="alreadyVote ? 'Already Voted' : 'Thank you for voting'"
+      @close="showDialog = false"
+    >
+      <p v-if="!alreadyVote">Thank you for voting for {{ selectedName }}. Your vote has been recorded.</p>
+      <p v-else>
+        You have already voted. If you would like to change your vote, please contact the
+        administrator.
+      </p>
+    </BaseDialog>
+    
   </section>
 </template>
 
 <script>
 import TheHeader from "../components/TheHeader.vue";
 import LoginModal from "../components/LoginModal.vue";
+import BaseDialog from "../components/BaseDialog.vue";
 export default {
   components: {
     TheHeader,
     LoginModal,
+    BaseDialog,
   },
   data() {
     return {
       selectedName: "",
+      selectedId: "",
       name: "",
       manifesto: "",
+      showDialog: false,
+      alreadyVote: false,
     };
   },
   computed: {
@@ -182,9 +195,18 @@ export default {
   },
   created() {
     this.$store.dispatch("getCompany");
+    const voted = localStorage.getItem("voted");
+    if (voted) {
+      this.alreadyVote = true;
+    }
   },
   methods: {
     voteButton(id) {
+      if (this.alreadyVote) {
+        this.showDialog = true;
+        return;
+      }
+      this.selectedId = id;
       this.selectedName = this.company.users.find(
         (user) => user.user_id === id
       ).user_name;

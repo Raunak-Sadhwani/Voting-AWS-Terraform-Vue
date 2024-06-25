@@ -11,19 +11,16 @@
               @focusin="changeIcon"
               @focusout="changeIcon"
               style="text-transform: capitalise; width: 90%"
-              placeholder="Search staff member by name"
+              placeholder="Search voters by name"
             />
             <i v-if="search" class="bx bx-search icon" />
             <i v-else class="bx bx-x icon" @click="close" />
           </div>
         </div>
         <div class="in-box">
-          <h2 style="text-transform: capitalize">All Staff Members</h2>
+          <h2 style="text-transform: capitalize">All Voters</h2>
         </div>
         <div class="in-box">
-          <button data-bs-toggle="modal" data-bs-target="#addStaff" class="button-42">
-            View Manifesto
-          </button>
           <!-- <button
             class="button-42"
             @click="showFilters = !showFilters"
@@ -36,27 +33,31 @@
     </div>
     <!-- <div class="productList"></div> -->
     <div class="userlist">
-      <div class="user" v-for="user in filteredUsers" :key="user.id">
+      <div class="user" v-for="user in filteredUsers" :key="user.voter_id">
         <div class="dets">
           <div class="name">
-            Full Name - <span>{{ user.name }}</span>
+            Full Name - <span>{{ user.voter_name }}</span>
           </div>
 
           <transition name="slide-from-top" appear>
             <div class="hidden" v-if="user.hidden">
               <br />
+              <br />
               <div class="name">
-                Position - <span>{{ user.position }}</span>
+                Email - <span>{{ user.voter_email }}</span>
               </div>
               <br />
               <div class="name">
-                Email - <span>{{ user.email }}</span>
+                Voted for - <span>({{ user.voted_for_id }})</span>
+                <span>({{ getContestant(user.voted_for_id) }})</span>
               </div>
-              <br />
-              <div class="name">
-                Website Link -
-                <a style="font-size: 1rem" :href="user.url">{{ user.url }}</a>
-              </div>
+              <!-- delete bootstap button -->
+              <button
+                  class="btn fw-bold fs-8 btn-outline-danger px-5"
+                  @click="$store.dispatch('deleteVoter', user.voter_id)"
+                >
+                  Delete
+                </button>
             </div>
           </transition>
         </div>
@@ -108,117 +109,29 @@
       </div>
     </transition> -->
     <!-- <div class="backdrop" @click="showFilters = !showFilters" v-if="showFilters" /> -->
-
-    <div
-      class="modal fade"
-      id="addStaff"
-      tabindex="-1"
-      aria-labelledby="addStaffLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-6 fw-bold fs-5" id="addStaffLabel">
-              Add Staff Member
-            </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form action="" method="post" @submit.prevent="addStaff" id="voteForm">
-              <div class="form-group mt-3">
-                <label for="name">Full Name</label>
-                <input
-                  required
-                  type="text"
-                  class="form-control"
-                  id="name"
-                  placeholder="Enter staff Full name"
-                  v-model.trim="name"
-                  maxlength="60"
-                  name="name"
-                  oninvalid="setCustomValidity('Invalid! Enter Full Name')"
-                  onkeydown="return /[a-z ]/i.test(event.key)"
-                  oninput="setCustomValidity('')"
-                  title="Enter Full Name"
-                  pattern="^((\b[a-zA-Z]{2,40}\b)\s*){2,3}$"
-                />
-              </div>
-              <div class="form-group mt-3">
-                <label for="email">Email</label>
-                <input
-                  required
-                  type="text"
-                  pattern="[^@\s]{2,}@[^@\s]{2,}\.[^@\s]{2,}"
-                  oninvalid="setCustomValidity('Enter Correct Email')"
-                  oninput="setCustomValidity('')"
-                  class="form-control"
-                  v-model.trim="email"
-                  id="email"
-                  placeholder="Enter your email"
-                />
-              </div>
-              <div class="form-group mt-3">
-                <label for="position">Position</label>
-                <input
-                  required
-                  type="text"
-                  list="positions"
-                  class="form-control"
-                  v-model.trim="position"
-                  id="position"
-                  placeholder="Enter your position"
-                  oninvalid="setCustomValidity('Enter Valid Position!')"
-                  oninput="setCustomValidity('')"
-                />
-                <datalist id="positions">
-                  <option
-                    v-for="position in uniquePositions"
-                    :key="position"
-                    :value="position"
-                  ></option>
-                </datalist>
-              </div>
-              <input type="submit" id="submit-form" style="display: none" />
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-              Close
-            </button>
-            <label for="submit-form" tabindex="0" class="btn btn-primary" id="submitVote"
-              >Add Staff</label
-            >
-          </div>
-        </div>
-      </div>
-    </div>
   </section>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 export default {
   computed: {
-    ...mapGetters(["token", "authMessage", "host", "authError", "newUrl"]),
+    voters() {
+      return this.$store.getters.voters;
+    },
     uniquePositions() {
       const positions = this.users.map((user) => user.position);
       return [...new Set(positions)];
     },
     filteredUsers() {
-      return this.users.filter((name) => {
-        // Check if the name matches the search query
-        let nameMatches = name.name.toLowerCase().includes(this.filterText.toLowerCase());
-        return nameMatches;
+      return this.$store.getters.voters.filter((name) => {
+        return name.voter_name.toLowerCase().includes(this.filterText.toLowerCase());
       });
     },
   },
-  mounted() {},
+  mounted() {
+    this.$store.dispatch("getVoters");
+    this.$store.dispatch("getCompany");
+  },
 
   data() {
     return {
@@ -227,118 +140,15 @@ export default {
       name: "",
       email: "",
       position: "",
-      users: [
-        {
-          id: 1,
-          name: "John Doe",
-          email: "john@doe.com",
-          position: "Manager",
-          hidden: false,
-          url: "https://www.vx.web.app/john2898239",
-        },
-        {
-          id: 2,
-          name: "Jane Schmoe",
-          email: "jane@Schmoe.com",
-          position: "Assistant Manager",
-          hidden: false,
-          url: "https://www.vx.web.app/jane2898239",
-        },
-        {
-          id: 3,
-          name: "Alice Peterson",
-          email: "alice@pet.com",
-          position: "Secretary",
-          hidden: false,
-          url: "https://www.vx.web.app/alice2898239",
-        },
-        // generate more 10 users, random names, emails, positions, urls
-        {
-          id: 4,
-          name: "Sarah Johnson",
-          email: "sarah@johnson.com",
-          position: "Designer",
-          hidden: false,
-          url: "https://www.vx.web.app/sarah2898239",
-        },
-        {
-          id: 5,
-          name: "Michael Smith",
-          email: "michael@smith.com",
-          position: "Developer",
-          hidden: false,
-          url: "https://www.vx.web.app/michael2898239",
-        },
-        {
-          id: 6,
-          name: "Emily Davis",
-          email: "emily@davis.com",
-          position: "Marketing Manager",
-          hidden: false,
-          url: "https://www.vx.web.app/emily2898239",
-        },
-        {
-          id: 7,
-          name: "David Wilson",
-          email: "david@wilson.com",
-          position: "Sales Representative",
-          hidden: false,
-          url: "https://www.vx.web.app/david2898239",
-        },
-        {
-          id: 8,
-          name: "Olivia Thompson",
-          email: "olivia@thompson.com",
-          position: "HR Manager",
-          hidden: false,
-          url: "https://www.vx.web.app/olivia2898239",
-        },
-        {
-          id: 9,
-          name: "James Anderson",
-          email: "james@anderson.com",
-          position: "Accountant",
-          hidden: false,
-          url: "https://www.vx.web.app/james2898239",
-        },
-        {
-          id: 10,
-          name: "Sophia Martinez",
-          email: "sophia@martinez.com",
-          position: "Customer Support",
-          hidden: false,
-          url: "https://www.vx.web.app/sophia2898239",
-        },
-        {
-          id: 11,
-          name: "Daniel Clark",
-          email: "daniel@clark.com",
-          position: "Project Manager",
-          hidden: false,
-          url: "https://www.vx.web.app/daniel2898239",
-        },
-        {
-          id: 12,
-          name: "Ava Rodriguez",
-          email: "ava@rodriguez.com",
-          position: "Quality Assurance",
-          hidden: false,
-          url: "https://www.vx.web.app/ava2898239",
-        },
-        {
-          id: 13,
-          name: "William Lee",
-          email: "william@lee.com",
-          position: "Data Analyst",
-          hidden: false,
-          url: "https://www.vx.web.app/william2898239",
-        },
-      ],
     };
   },
   methods: {
     filterProducts() {
       this.changeIcon();
+    },
+    getContestant(id) {
+      const company = this.$store.getters.getCompany;
+      return company.users.find((user) => user.user_id === id).user_name;
     },
     changeIcon() {
       if (this.filterText.length > 0) {
@@ -350,20 +160,6 @@ export default {
     close() {
       this.search = true;
       this.filter = "";
-    },
-    addStaff() {
-      // Add staff member
-      const staff = {
-        name: this.name,
-        email: this.email,
-        position: this.position,
-      };
-      this.users.unshift(staff);
-      this.name = "";
-      this.email = "";
-      this.position = "";
-      //   dissmiss modal
-      $("#addStaff").modal("hide");
     },
   },
 };
