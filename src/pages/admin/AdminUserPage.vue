@@ -52,12 +52,12 @@
                 <span>({{ getContestant(user.voted_for_id) }})</span>
               </div>
               <!-- delete bootstap button -->
-              <button
+              <!-- <button
                   class="btn fw-bold fs-8 btn-outline-danger px-5"
                   @click="$store.dispatch('deleteVoter', user.voter_id)"
                 >
                   Delete
-                </button>
+                </button> -->
             </div>
           </transition>
         </div>

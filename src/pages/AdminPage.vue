@@ -44,7 +44,6 @@ export default {
   },
 
   created() {
-    // console.log(this)
     window.document.body.style.backgroundColor = "#e3e3e3";
     window.addEventListener("resize", this.handleResize);
     this.handleResize();

@@ -162,7 +162,7 @@ resource "aws_api_gateway_integration" "get_integration" {
   resource_id             = aws_api_gateway_resource.voting_resource.id
   http_method             = aws_api_gateway_method.get_method.http_method
   type                    = "AWS_PROXY"
-  integration_http_method = "GET"
+  integration_http_method = "POST"
   uri                     = aws_lambda_function.voting_app_function.invoke_arn
 }
 
@@ -171,7 +171,7 @@ resource "aws_api_gateway_integration" "delete_integration" {
   resource_id             = aws_api_gateway_resource.voting_resource.id
   http_method             = aws_api_gateway_method.delete_method.http_method
   type                    = "AWS_PROXY"
-  integration_http_method = "DELETE"
+  integration_http_method = "POST"
   uri                     = aws_lambda_function.voting_app_function.invoke_arn
 }
 
@@ -190,7 +190,7 @@ resource "aws_api_gateway_integration" "get_voter_integration" {
   resource_id             = aws_api_gateway_resource.voter_resource.id
   http_method             = aws_api_gateway_method.get_voter_method.http_method
   type                    = "AWS_PROXY"
-  integration_http_method = "GET"
+  integration_http_method = "POST"
   uri                     = aws_lambda_function.voter_app_function.invoke_arn
 }
 
@@ -199,7 +199,7 @@ resource "aws_api_gateway_integration" "delete_voter_integration" {
   resource_id             = aws_api_gateway_resource.voter_resource.id
   http_method             = aws_api_gateway_method.delete_voter_method.http_method
   type                    = "AWS_PROXY"
-  integration_http_method = "DELETE"
+  integration_http_method = "POST"
   uri                     = aws_lambda_function.voter_app_function.invoke_arn
 }
 

@@ -3,8 +3,6 @@ const ddc = new aws.DynamoDB.DocumentClient();
 const tableName = process.env.TABLE_NAME;
 
 exports.handler = async (event) => {
-    console.log(event);
-
     const httpMethod = event.httpMethod;
     switch (httpMethod) {
         case 'POST':
@@ -172,8 +170,6 @@ const _responseHelper = (statusCode, payload) => {
         "statusCode": statusCode,
         headers: {
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': '*',
-            'Access-Control-Allow-Methods': '*'
         },
         "body": payload
     };
