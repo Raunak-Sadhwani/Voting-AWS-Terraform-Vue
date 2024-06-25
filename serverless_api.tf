@@ -312,7 +312,7 @@ output "api_endpoint" {
 resource "local_file" "config_js" {
   content  = <<-EOF
     window.config = {
-      API_ENDPOINT: "${aws_api_gateway_deployment.voting_api_deployment.invoke_url}"
+      API_ENDPOINT: "${aws_api_gateway_deployment.voting_api_deployment.invoke_url}",
       API_COGNITO: "${aws_api_gateway_deployment.votingx_deployment.invoke_url}"
     };
    export default window.config;

@@ -16,7 +16,8 @@ const store = createStore({
   },
   actions: {
     async getVoters(context) {
-      const resp = await fetch(`${API_ENDPOINT}/voter`);
+      console.log('hjj');
+      const resp = await fetch(`${this.host}/voter`);
       const data = await resp.json();
       // check response code
       if (resp.status !== 200) {        
@@ -33,7 +34,7 @@ const store = createStore({
     async vote(context, voteData) {
       // set updating
       context.commit("setUpdating", true);
-      const resp = await fetch(`${API_ENDPOINT}/voter`, {
+      const resp = await fetch(`${this.host}/voter`, {
         method: "POST",
         body: JSON.stringify(voteData),
       });
@@ -54,7 +55,7 @@ const store = createStore({
     async deleteVoter(context, voterId) {
       // set updating
       context.commit("setUpdating", true);
-      const resp = await fetch(`${API_ENDPOINT}/voter?voter_id=${voterId}`, {
+      const resp = await fetch(`${this.host}/voter?voter_id=${voterId}`, {
         method: "DELETE",
       });
       const data = await resp.json();
@@ -75,7 +76,7 @@ const store = createStore({
       // set updating
       console.log(context.getters.host);
       context.commit("setUpdating", true);
-      const resp = await fetch(`${API_ENDPOINT}/voting`);
+      const resp = await fetch(`${this.host}/voting`);
       const data = await resp.json();
       console.log(data);
       // check response code
@@ -93,7 +94,7 @@ const store = createStore({
     async login(context, userdata) {
       // set updating
       context.commit("setUpdating", true);
-      const resp = await fetch(`${API_COGNITO}/login`, userdata);
+      const resp = await fetch(`${this.cognitoHost}/login`, userdata);
       const data = await resp.json();
       // check response code
       if (resp.status !== 200) {        
