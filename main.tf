@@ -98,8 +98,14 @@ resource "aws_s3_object" "assets" {
   content_type = local.mime_types[split(".", each.key)[length(split(".", each.key)) - 1]] # Get the file extension and lookup the MIME type
 }
 
+<<<<<<< HEAD
 output "bucket_url" {
   value = aws_s3_bucket.firstbucket.website_endpoint
 }
+=======
+# output "bucket_url" {
+#   value = aws_s3_bucket.firstbucket.website_endpoint
+# }
+>>>>>>> 5a828b271b8a471840df7bc2381549ae225f6eba
 
 
