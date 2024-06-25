@@ -1,19 +1,14 @@
 <script>
 export default {
   async created() {
-    // https://k17l3ph5r8.execute-api.us-east-1.amazonaws.com/prod/login/
-    const resp = await fetch(
-      "https://k17l3ph5r8.execute-api.us-east-1.amazonaws.com/prod/verify-tok",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+    await this.$store.dispatch(
+      "login",
+      JSON.stringify({
+        Email: "xyz@sd.io",
+        Password: "123456",
+      })
     );
-    const data = await resp.json();
-    console.log(resp);
-    console.log(data);
+    this.$store.dispatch("auth", "token");
   },
 };
 </script>

@@ -153,7 +153,7 @@
         </div>
       </div>
     </div>
-    <LoginModal :selected-name="selectedName"/>
+    <LoginModal :selected-name="selectedName" />
   </section>
 </template>
 
@@ -169,7 +169,6 @@ export default {
     return {
       selectedName: "",
       name: "",
-      apiEndpoint: import.meta.env.VITE_API_ENDPOINT,
       manifesto: "",
     };
   },
@@ -177,19 +176,23 @@ export default {
     company() {
       return this.$store.getters.getCompany;
     },
+    host() {
+      return this.$store.getters.host;
+    },
   },
-  mounted() {
-
+  created() {
+    this.$store.dispatch("getCompany");
   },
   methods: {
-    
     voteButton(id) {
-      this.selectedName = this.company.users.find((user) => user.user_id === id)
-        .user_name;
+      this.selectedName = this.company.users.find(
+        (user) => user.user_id === id
+      ).user_name;
     },
     manifestoButton(id) {
-      this.manifesto = this.company.users.find((user) => user.user_id === id)
-        .user_manifesto;
+      this.manifesto = this.company.users.find(
+        (user) => user.user_id === id
+      ).user_manifesto;
     },
   },
 };

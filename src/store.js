@@ -9,42 +9,36 @@ const store = createStore({
     authMessage: "",
     authError: false,
     updating: true,
-    company: {
-      company_id: "123456789",
-      name: "Acme Inc.",
-      email: "info@acme.com",
-      voting_role: "President",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu nibh et felis interdum accumsan. Pellentesque elit odio, interdum quis ante in, varius rhoncus orci.",
-      users: [
-        {
-          user_id: "user1",
-          user_name: "Alice",
-          user_email: "alice@example.com",
-          user_votes: 100,
-          user_description:
-            " Aliquam utrum nibh rutrum nibh vitae tortor dapibus egestas. Cras condimentum dapibus tellus vel semper. Quisque vel dui molestie est auctor utrum nibh porttitor.",
-          user_manifesto:
-            "1. Innovate healthcare technology.\n2. Improve patient outcomes.\n3. Enhance operational efficiency.\n4. Promote patient-centered care.\n5. Ensure healthcare accessibility.",
-        },
-        {
-          user_id: "user2",
-          user_name: "Bob",
-          user_votes: 200,
-          user_email: "bob@example.com",
-          user_description:
-            " Aliquam utrum nibh rutrum nibh vitae tortor dapibus egestas. Cras condimentum dapibus tellus vel semper. Quisque vel dui molestie est auctor utrum nibh porttitor.",
-          user_manifesto:
-            "1. Innovate healthcare technology.\n2. Improve patient outcomes.\n3. Enhance operational efficiency.\n4. Promote patient-centered care.\n5. Ensure healthcare accessibility.",
-        },
-      ],
-    },
+    company: {}
   },
   actions: {
+    async getCompany(context) {
+      // set updating
+      console.log(context.getters.host);
+      context.commit("setUpdating", true);
+      const resp = await fetch(`https://4te75mf9x8.execute-api.us-east-1.amazonaws.com/prod/voting`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await resp.json();
+      // check response code
+      if (resp.status !== 200) {        
+        const payload = {
+          error: true,
+          message: data.message + " " + (data.error ?? ""),
+        }
+        context.commit("setAuthError", payload);
+      } else {
+        context.commit("setCompany", data);
+      }
+      context.commit("setUpdating", false);
+    },
     async login(context, userdata) {
       // set updating
       context.commit("setUpdating", true);
-      const resp = await fetch(`${context.getters.host}login/`, {
+      const resp = await fetch(`https://3a07too316.execute-api.us-east-1.amazonaws.com/prod/login/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -68,7 +62,7 @@ const store = createStore({
     async auth(context, token) {
       // set updating
       context.commit("setUpdating", true);
-      const resp = await fetch(`${context.getters.host}verify-token`, {
+      const resp = await fetch(`https://3a07too316.execute-api.us-east-1.amazonaws.com/prod/verify-token`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -101,7 +95,10 @@ const store = createStore({
     },
     setUpdating(state, payload) {
       state.updating = payload;
-    }
+    },
+    setCompany(state, payload) {
+      state.company = payload;
+    },
   },
   getters: {
     getCompany: (state) => {
