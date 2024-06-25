@@ -47,40 +47,33 @@ const _postData = async (oRequestData) => {
     if (tableName.startsWith("voter")) {
         const votedForId = oParams.Item.voted_for_id;
         const companyTableName = "CompanyTable";
+
         try {
-            // Get the user from CompanyTable
-            const userParams = {
+            // Get the company from CompanyTable
+            const compParams = {
                 TableName: companyTableName,
                 Key: {
-                    'user_id': votedForId
+                    'company_id': "1234567890"
                 }
             };
+            const response = await ddc.get(compParams).promise();
+            const company = response.Item;
 
-            const userData = await ddc.get(userParams).promise();
-            const userItem = userData.Item;
+            // Get the user from the company
+            const user = company.users.find(user => user.user_id === votedForId);
+            if (user) {
+                // Update the user votes
+                user.user_votes = user.user_votes + 1;
 
-            if (userItem) {
-                // Increment the vote count
-                userItem.user_votes = (userItem.user_votes || 0) + 1;
-
-                // Update the user in CompanyTable
-                const updateParams = {
+                // Update the company in CompanyTable
+                const compParams = {
                     TableName: companyTableName,
-                    Key: {
-                        'user_id': votedForId
-                    },
-                    UpdateExpression: "set user_votes = :v",
-                    ExpressionAttributeValues: {
-                        ":v": userItem.user_votes
-                    },
-                    ReturnValues: "UPDATED_NEW"
+                    Item: company
                 };
-
-                await ddc.update(updateParams).promise();
+                await ddc.put(compParams).promise();
             } else {
-                throw new Error('User not found in CompanyTable');
+                throw new Error("User not found in the company");
             }
-
             // Put the new voter item in voterTable
             // await ddc.put(oParams).promise();
         } catch (error) {
