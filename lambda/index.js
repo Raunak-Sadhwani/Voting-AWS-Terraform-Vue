@@ -105,7 +105,7 @@ const _deleteItem = async (id) => {
                 if (tableName.startsWith("voter")){
                     name = "voter_id";
 
-                    const votedForId = oParams.Item.voted_for_id;
+                    const votedForId = id;
                     const companyTableName = "CompanyTable";
 
                     try {
