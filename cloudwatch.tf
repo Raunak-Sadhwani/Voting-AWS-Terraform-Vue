@@ -57,20 +57,12 @@
 
 # resource "aws_iam_role_policy_attachment" "cloudwatch_policy_attachment" {
 #   role       = aws_iam_role.lambda_execution_role.name
-<<<<<<< HEAD
-#   policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
-=======
 #   policy_arn = aws_iam_policy.cloudwatch_logs_policy.arn
->>>>>>> 5a828b271b8a471840df7bc2381549ae225f6eba
 # }
 
 # resource "aws_lambda_function" "log_processor" {
 #   filename         = "lambda_function/lambda_function_payload.zip"
-<<<<<<< HEAD
-#   function_name    = "cloudfront-log-processor"
-=======
 #   function_name    = "cloudwatch-log-processor"
->>>>>>> 5a828b271b8a471840df7bc2381549ae225f6eba
 #   role             = aws_iam_role.lambda_execution_role.arn
 #   handler          = "index.handler"
 #   runtime          = "nodejs20.x"
@@ -78,13 +70,6 @@
 # }
 
 # resource "aws_cloudwatch_log_subscription_filter" "cloudfront_subscription_filter" {
-<<<<<<< HEAD
-#   name            = "cloudfront-subscription-filter"
-#   log_group_name  = aws_cloudwatch_log_group.cloudfront_log_group.name
-#   filter_pattern  = ""
-#   destination_arn = aws_lambda_function.log_processor.arn
-# }
-=======
 #   name            = "cloudwatch-subscription-filter"
 #   log_group_name  = aws_cloudwatch_log_group.cloudfront_log_group.name
 #   filter_pattern  = ""
@@ -92,4 +77,3 @@
 
 #   depends_on = [aws_lambda_function.log_processor]
 # }
->>>>>>> 5a828b271b8a471840df7bc2381549ae225f6eba
