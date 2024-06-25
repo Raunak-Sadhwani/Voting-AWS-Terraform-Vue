@@ -7,6 +7,7 @@ const store = createStore({
   state: {
     adminAuth: false,
     host: config.API_ENDPOINT,
+    cognitoHost: config.API_COGNITO,
     authMessage: "",
     authError: false,
     updating: true,
@@ -15,7 +16,7 @@ const store = createStore({
   },
   actions: {
     async getVoters(context) {
-      const resp = await fetch(`https://1kr1ifban0.execute-api.us-east-1.amazonaws.com/prod/voter`);
+      const resp = await fetch(`${API_ENDPOINT}/voter`);
       const data = await resp.json();
       // check response code
       if (resp.status !== 200) {        
@@ -32,7 +33,7 @@ const store = createStore({
     async vote(context, voteData) {
       // set updating
       context.commit("setUpdating", true);
-      const resp = await fetch(`https://1kr1ifban0.execute-api.us-east-1.amazonaws.com/prod/voter`, {
+      const resp = await fetch(`${API_ENDPOINT}/voter`, {
         method: "POST",
         body: JSON.stringify(voteData),
       });
@@ -53,7 +54,7 @@ const store = createStore({
     async deleteVoter(context, voterId) {
       // set updating
       context.commit("setUpdating", true);
-      const resp = await fetch(`https://1kr1ifban0.execute-api.us-east-1.amazonaws.com/prod/voter?voter_id=${voterId}`, {
+      const resp = await fetch(`${API_ENDPOINT}/voter?voter_id=${voterId}`, {
         method: "DELETE",
       });
       const data = await resp.json();
@@ -74,7 +75,7 @@ const store = createStore({
       // set updating
       console.log(context.getters.host);
       context.commit("setUpdating", true);
-      const resp = await fetch(`https://1kr1ifban0.execute-api.us-east-1.amazonaws.com/prod/voting`);
+      const resp = await fetch(`${API_ENDPOINT}/voting`);
       const data = await resp.json();
       console.log(data);
       // check response code
@@ -92,7 +93,7 @@ const store = createStore({
     async login(context, userdata) {
       // set updating
       context.commit("setUpdating", true);
-      const resp = await fetch(`https://3uir59f5xc.execute-api.us-east-1.amazonaws.com/prod/login`, userdata);
+      const resp = await fetch(`${API_COGNITO}/login`, userdata);
       const data = await resp.json();
       // check response code
       if (resp.status !== 200) {        
