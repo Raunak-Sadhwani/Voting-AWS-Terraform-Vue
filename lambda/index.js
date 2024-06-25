@@ -1,6 +1,6 @@
 const aws = require('aws-sdk');
 const ddc = new aws.DynamoDB.DocumentClient();
-const tableName = 'CompanyTable';
+const tableName = process.env.TABLE_NAME;
 
 exports.handler = async (event) => {
     console.log(event);
@@ -23,8 +23,13 @@ exports.handler = async (event) => {
             }
         case 'DELETE':
             try {
-                const companyID = event.queryStringParameters['company_id'];
-                await _deleteItem(companyID);
+                let id;
+                if (tableName.startsWith("voter")){
+                    id = event.queryStringParameters['voter_id'];
+                } else {
+                    id = event.queryStringParameters['company_id'];
+                }
+                await _deleteItem(id);
                 return _responseHelper(200, "Item deleted successfully!");
             } catch (error) {
                 return _responseHelper(404, error.message);
@@ -59,11 +64,17 @@ const _getData = async () => {
     }
 };
 
-const _deleteItem = async (companyID) => {
+const _deleteItem = async (id) => {
+    let name;
+                if (tableName.startsWith("voter")){
+                    name = "voter_id";
+                } else {
+                    name =  "company_id";
+                }
     const oParams = {
         TableName: tableName,
         Key: {
-            'company_id': companyID
+            name: id
         }
     };
 
