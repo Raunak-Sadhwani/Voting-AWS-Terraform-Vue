@@ -23,7 +23,7 @@
               <span class="text-primary fw-bold">{{ company.voting_role }}</span>
             </h6>
             <p class="text-dark mt-3 mb-3 fs-8">
-              {{ company.description }}
+              <!-- {{ user.user_descriptions }} -->
             </p>
             <button
               data-bs-toggle="modal"

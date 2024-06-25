@@ -44,38 +44,45 @@ const _postData = async (oRequestData) => {
         TableName: tableName,
         Item: oRequestData
     };
-    if (tableName.startsWith("voter")){
-        const userx = oParams.Item.voted_for_id;
-        const tabName= "companyTable";
-        // get the user in companyTable
-        // add one to the vote count of company users
-        const getUserParams = {
-            TableName: tabName,
-            Key: {
-                user_id: userx
-            },
-        };
+    if (tableName.startsWith("voter")) {
+        const votedForId = oParams.Item.voted_for_id;
+        const companyTableName = "CompanyTable";
         try {
-            const userResult = await ddc.get(getUserParams).promise();
-            if (userResult.Item) {
-                // Increment the vote count
-                const updatedVotes = userResult.Item.user_votes + 1;
+            // Get the user from CompanyTable
+            const userParams = {
+                TableName: companyTableName,
+                Key: {
+                    'user_id': votedForId
+                }
+            };
 
-                // Update the user vote count in the company table
-                const updateUserParams = {
-                    TableName: companyTable,
+            const userData = await ddc.get(userParams).promise();
+            const userItem = userData.Item;
+
+            if (userItem) {
+                // Increment the vote count
+                userItem.user_votes = (userItem.user_votes || 0) + 1;
+
+                // Update the user in CompanyTable
+                const updateParams = {
+                    TableName: companyTableName,
                     Key: {
-                        'user_id': userx
+                        'user_id': votedForId
                     },
-                    UpdateExpression: 'set user_votes = :votes',
+                    UpdateExpression: "set user_votes = :v",
                     ExpressionAttributeValues: {
-                        ':votes': updatedVotes
-                    }
+                        ":v": userItem.user_votes
+                    },
+                    ReturnValues: "UPDATED_NEW"
                 };
-                await ddc.update(updateUserParams).promise();
+
+                await ddc.update(updateParams).promise();
             } else {
-                throw new Error("User not found");
+                throw new Error('User not found in CompanyTable');
             }
+
+            // Put the new voter item in voterTable
+            // await ddc.put(oParams).promise();
         } catch (error) {
             throw new Error(error.message);
         }
