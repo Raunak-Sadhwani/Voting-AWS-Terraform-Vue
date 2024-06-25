@@ -4,8 +4,8 @@
 
     <div class="container py-5 big-padding">
       <div class="row section-title">
-        <h2 class="fs-5 text-center">XYZ Company Voting Result</h2>
-        <p>The below chart shows the voting results of the XYZ company. <br /></p>
+        <h2 class="fs-5 text-center">{{ company.name }} Voting Result</h2>
+        <p>The below chart shows the voting results of the {{ company.name }}. <br /></p>
       </div>
       <div class="row mb-5">
         <div class="col-md-6 mb-4" v-for="user in company.users" :key="user.company_id">

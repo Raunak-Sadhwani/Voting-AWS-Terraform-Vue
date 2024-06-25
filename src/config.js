@@ -1,5 +1,5 @@
  window.config = {
-   API_ENDPOINT: "https://575ifpwidc.execute-api.us-east-1.amazonaws.com/prod",
-   API_COGNITO: "https://9ywynjdjm6.execute-api.us-east-1.amazonaws.com/prod"
+   API_ENDPOINT: "https://e13q7qpyv6.execute-api.us-east-1.amazonaws.com/prod",
+   API_COGNITO: "https://raiqiazjtf.execute-api.us-east-1.amazonaws.com/prod"
  };
 export default window.config;
