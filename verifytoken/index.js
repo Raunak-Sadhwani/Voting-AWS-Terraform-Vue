@@ -22,6 +22,11 @@ exports.handler = async (event) => {
     } else {
         return {
             statusCode: 400,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Methods': '*'
+            },
             body: JSON.stringify({
                 message: "Missing request body"
             })
@@ -33,6 +38,11 @@ exports.handler = async (event) => {
     if (!token) {
         return {
             statusCode: 400,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Methods': '*'
+            },
             body: JSON.stringify({
                 message: "Token is required"
             })
@@ -52,12 +62,22 @@ exports.handler = async (event) => {
 
         return {
             statusCode: 200,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Methods': '*'
+            },
             body: JSON.stringify(decoded)
         };
     } catch (error) {
         console.error('Error verifying token:', error);
         return {
             statusCode: 401,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Methods': '*'
+            },
             body: JSON.stringify({
                 message: "Invalid token",
                 error: error.message

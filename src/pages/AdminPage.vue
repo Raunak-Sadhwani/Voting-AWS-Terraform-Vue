@@ -1,9 +1,6 @@
 <template>
+  
   <section v-if="isDesktop">
-    <BaseSpinner v-if="updating"/>
-    <base-dialog :show="!!authError" title="Something Happened" @close="handleError">
-      <p>{{ authMessage }}</p>
-    </base-dialog>
     <!-- <transition name="fadeIn"> </transition> -->
     <TheSidebar
       v-if="adminAuth"
@@ -40,11 +37,7 @@
 
 <script>
 // import logo from "../assets/logo.png";
-import { mapGetters } from "vuex";
 import TheSidebar from "../components/TheSidebar.vue";
-import BaseSpinner from "../components/BaseSpinner.vue";
-import BaseDialog from "../components/BaseDialog.vue";
-
 export default {
   components: {
     TheSidebar,
@@ -64,7 +57,18 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
   computed: {
-    ...mapGetters(["authError", "authMessage", "adminAuth", "updating"]),
+    authError() {
+      return this.$store.getters.authError;
+    },
+    authMessage() {
+      return this.$store.getters.authMessage;
+    },
+    adminAuth() {
+      return this.$store.getters.adminAuth;
+    },
+    updating() {
+      return this.$store.getters.updating;
+    },
   },
 
   data() {

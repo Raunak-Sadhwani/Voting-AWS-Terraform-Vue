@@ -104,6 +104,41 @@ const _deleteItem = async (id) => {
     let name;
                 if (tableName.startsWith("voter")){
                     name = "voter_id";
+
+                    const votedForId = oParams.Item.voted_for_id;
+                    const companyTableName = "CompanyTable";
+
+                    try {
+                        // Get the company from CompanyTable
+                        const compParams = {
+                            TableName: companyTableName,
+                            Key: {
+                                'company_id': "1234567890"
+                            }
+                        };
+                        const response = await ddc.get(compParams).promise();
+                        const company = response.Item;
+
+                        // Get the user from the company
+                        const user = company.users.find(user => user.user_id === votedForId);
+                        if (user) {
+                            // Update the user votes
+                            user.user_votes = user.user_votes - 1;
+
+                            // Update the company in CompanyTable
+                            const compParams = {
+                                TableName: companyTableName,
+                                Item: company
+                            };
+                            await ddc.put(compParams).promise();
+                        } else {
+                            throw new Error("User not found in the company");
+                        }
+                        // Put the new voter item in voterTable
+                        // await ddc.put(oParams).promise();
+                    } catch (error) {
+                        throw new Error(error.message);
+                    }
                 } else {
                     name =  "company_id";
                 }

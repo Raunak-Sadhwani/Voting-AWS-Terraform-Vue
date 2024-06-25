@@ -53,7 +53,7 @@ const store = createStore({
     async deleteVoter(context, voterId) {
       // set updating
       context.commit("setUpdating", true);
-      const resp = await fetch(`https://1kr1ifban0.execute-api.us-east-1.amazonaws.com/prod/voter/${voterId}`, {
+      const resp = await fetch(`https://1kr1ifban0.execute-api.us-east-1.amazonaws.com/prod/voter?voter_id=${voterId}`, {
         method: "DELETE",
       });
       const data = await resp.json();
@@ -66,6 +66,7 @@ const store = createStore({
         context.commit("setAuthError", payload);
       } else {
         context.dispatch("getVoters");
+        alert("Voter deleted successfully");
       }
       context.commit("setUpdating", false);
     },
