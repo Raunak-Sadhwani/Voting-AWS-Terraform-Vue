@@ -7,7 +7,7 @@ variables:
  AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
 
 before_script:
- - apk update --repository=http://dl-cdn.alpinelinux.org/alpine/v3.13/main && apk add --no-cache nodejs npm
+ - apk add --no-cache nodejs npm
  - apk add aws-cli
  - apk add bash
  - apk add npm
@@ -17,7 +17,6 @@ stages:
   - validate
   - plan
   - apply
-  - destroy
 
 validate:
  stage: validate
@@ -29,7 +28,7 @@ validate:
    paths:
     - node_modules/
     - dist/
-    - terraform/terraform.tfstate
+    - terraform.tfstate
     - .terraform.lock.hcl
  script:
   - terraform init -backend=false
@@ -39,45 +38,28 @@ validate:
 plan:
  stage: plan
  script:
-  - terraform init
-  - terraform plan
+  - terraform init 
+  - terraform plan -out terraform.tfplan
  artifacts:
   paths:
    - dist/
    - node_modules/
-   - terraform/terraform.tfstate
+   - terraform.tfstate
    - .terraform.lock.hcl
+   - terraform.tfplan
  dependencies:
   - validate
 
 apply:
- stage: apply
- before_script:
-  - apk update && apk add --no-cache nodejs npm
-  - npm install -g npm@latest
-  - npm ci
- script:
-  - terraform init
-  - terraform apply -auto-approve || npm run build
-  - npm run build
-  - terraform apply -auto-approve || terraform apply -auto-approve
- artifacts:
-  paths:
-   - .terraform.lock.hcl
-   - dist/
-   - node_modules/
-   - terraform/terraform.tfstate
- only:
-  - main
-
-destroy:
- stage: destroy
- script:
-  - terraform init
-  - terraform destroy -auto-approve
- dependencies:
-  - apply
-  - plan
- when: manual
-
-
+  stage: apply
+  script:
+    - terraform apply -auto-approve terraform.tfplan || npm run build
+    - npm run build
+    - terraform apply -auto-approve
+  artifacts:
+    paths:
+    - dist/
+    - terraform.tfstate
+    - .terraform.lock.hcl
+  only:
+    - main
