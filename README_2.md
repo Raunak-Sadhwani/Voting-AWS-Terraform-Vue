@@ -1,6 +1,6 @@
 <br/>
 
-# voting Management System
+# Voting Management System
 
 ###### Prof. Dr Thomas Fankhauser | Cloud Computing  | Hochshule Heilbronn 
 
@@ -11,7 +11,7 @@
     <tbody>
         <tr>
             <td>Students (ID)</td>
-           <td>Aditya Gawade, Raunak Sadhwani </td> 
+           <td>Aditya Gawade(agawade), Raunak Sadhwani (rsadhwani)</td> 
         </tr>
         <tr>
             <td>Semester</td>
@@ -50,7 +50,6 @@ To provide a user-friendly interface, the frontend of the application was develo
 The backend of the application is built as a serverless application using AWS Lambda and JS. The backend exposes Representational State Transfer (REST) API endpoints that handle requests from the frontend. The data is stored in DynamoDB, a cloud database service provided by AWS. The use of serverless architecture allows for automatic scaling based on demand, ensuring efficient resource allocation.
 
 ### 1.1 Application Working 
-Our Application is an interface to store new employees details in the database and perform operations on that data. New employee can be added, View, Update and delete existing from the database. Only the Employee admin team can perform these operations. We also have an alert mechanism for Convicted employees and an Alert Email is sent to HR when a Convicted Employee is added to the database. 
 Our website enables employees to cast votes for electing candidates to various organizational positions. Employees can visit the site to view candidate details, including manifestos, before casting their votes. After selecting a candidate, employees must enter their name, email, and voter ID provided by the organization. A "View Result" button allows employees to see the number of votes each candidate has received.
 
 The backend of the application is built as a serverless application using AWS Lambda and JavaScript. It exposes Representational State Transfer (REST) API endpoints that handle requests from the frontend. Voting data is stored in DynamoDB, a cloud-based database service provided by AWS. The serverless architecture ensures automatic scaling based on demand, enabling efficient resource allocation.  The application also performs create operations for voters using the POST method, allowing new voters to be registered seamlessly. This approach ensures a secure, efficient, and transparent voting process, providing a user-friendly experience for all employees within the organization.
