@@ -96,9 +96,10 @@
               Role: <span class="text-danger fw-bold">Backend Developer</span>
             </h6>
             <p class="text-dark mt-3 mb-3 fs-8">
-              Aliquam utrum nibh rutrum nibh vitae tortor dapibus egestas. Cras
-              condimentum dapibus tellus vel semper. Quisque vel dui molestie est auctor
-              condimentum dapibus tellus vel semper. Quisque vel dui molestie est auctor
+              I have five years of professional experience. I am constantly learning and
+              staying updated with the latest industry trends. My goal is to make a
+              significant impact in the field of software engineering and drive positive
+              change through my work.
             </p>
           </div>
         </div>
@@ -149,19 +150,24 @@
         </div>
       </div>
     </div>
-    <LoginModal :selected-id="selectedId" :selected-name="selectedName" @close="showDialog = true" />
+    <LoginModal
+      :selected-id="selectedId"
+      :selected-name="selectedName"
+      @close="showDialog = true"
+    />
     <BaseDialog
       :show="showDialog"
       :title="alreadyVote ? 'Already Voted' : 'Thank you for voting'"
       @close="showDialog = false"
     >
-      <p v-if="!alreadyVote">Thank you for voting for {{ selectedName }}. Your vote has been recorded.</p>
+      <p v-if="!alreadyVote">
+        Thank you for voting for {{ selectedName }}. Your vote has been recorded.
+      </p>
       <p v-else>
         You have already voted. If you would like to change your vote, please contact the
         administrator.
       </p>
     </BaseDialog>
-    
   </section>
 </template>
 

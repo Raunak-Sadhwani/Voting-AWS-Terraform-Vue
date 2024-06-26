@@ -20,23 +20,20 @@ stages:
 
 validate:
  stage: validate
- before_script:
-   - apk update && apk add --no-cache nodejs npm
-   - npm install -g npm@latest
-   - npm ci
  artifacts:
    paths:
-    - node_modules/
-    - dist/
     - terraform.tfstate
     - .terraform.lock.hcl
  script:
   - terraform init -backend=false
   - terraform validate
-  - npm run build
 
 plan:
  stage: plan
+ before_script:
+   - apk update && apk add --no-cache nodejs npm
+   - npm install -g npm@latest
+   - npm ci
  script:
   - terraform init 
   - terraform plan -out terraform.tfplan
@@ -47,18 +44,21 @@ plan:
    - terraform.tfstate
    - .terraform.lock.hcl
    - terraform.tfplan
+   - npm run build
  dependencies:
   - validate
 
 apply:
   stage: apply
   script:
-    - terraform apply -auto-approve terraform.tfplan || npm run build
+    - terraform init 
+    - terraform apply -auto-approve terraform.tfplan || terraform apply -auto-approve 
     - npm run build
     - terraform apply -auto-approve
   artifacts:
     paths:
     - dist/
+    - node_modules/
     - terraform.tfstate
     - .terraform.lock.hcl
   only:
