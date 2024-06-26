@@ -191,30 +191,30 @@ The communication between the frontend and backend is facilitated by the API Gat
             <td>Sample Response</td>
         </tr>
         <tr>
-            <td>Add new Employee</td>
+            <td>Cast vote</td>
             <td>POST</td>
-            <td>/employeeData</td>
+            <td>/VotingData</td>
             <td>Post operation</td>
             <td>Records inserted successfully!</td>
         </tr>
         <tr>
-            <td>Retrieve a Employee data</td>
+            <td>Retrieve a candidate data</td>
             <td>GET</td>
-            <td>/employeeData</td>
+            <td>/CompanyData</td>
             <td>Get operation</td>
-            <td>All employee data</td>
+            <td>All Candidate data</td>
         </tr>
         <tr>
-            <td>Delete Employee Data</td>
-            <td>Detele</td>
-            <td>/employeeData/:id</td>
-            <td>Delete operation</td>
-            <td>Item deleted successfully!</td>
+            <td>Voter details</td>
+            <td>POST</td>
+            <td>/VoterData/:id</td>
+            <td>Post operation</td>
+            <td>Data added successfully!</td>
         </tr>
     </tbody>
 </table>
     **2.6 Communication between all components**
-In this application's architecture, seamless communication among various AWS components ensures the smooth functioning of the system. Client interactions commence through API Gateway, acting as the gateway for requests, which then directs them to backend JavaScript code executed by AWS Lambda functions. These functions, in turn, interact with DynamoDB, a NoSQL database, for efficient storage and retrieval of employee data. Identity and Authorization Management (IAM) plays a pivotal role in maintaining secure access controls across different AWS services, including DynamoDB. User authentication and identity management are handled by Amazon Cognito, while AWS CloudFront enhances global content delivery and directs users to Cognito for the sign-in process. Additionally, an alert mechanism is implemented using Amazon Simple Email Service (SES), triggered when the "Convicted" box is checked, with CloudWatch Logs providing insights for monitoring and troubleshooting. This orchestrated communication flow ensures the reliability, scalability, and security of the application's architecture.
+In this system, different AWS components work together to keep everything running smoothly. Users start by making requests through API Gateway, which sends these requests to JavaScript code running on AWS Lambda. This code then talks to DynamoDB, a NoSQL database, to store and get information about voters and candidates. IAM ensures that access to these services is secure. Amazon Cognito manages user login and identity, and AWS CloudFront helps deliver content quickly around the world and connects users to Cognito for authentication.
 
 ## Chapter 3 -  Tooling
 **3.1 Working on the application**
@@ -223,12 +223,11 @@ In this application's architecture, seamless communication among various AWS com
 - step 2: git pull
 - step 3: If the access key and Security Key is not added in the git repo then developer should add these keys in main.tf.
 - step 4: check the region, change accordingly to his current region. 
-- step 4: For SES , update your emails ID  to get  and recive verifications and convicted mails.
 - step 5: terraform init 
 - step 6: terraform plan 
-- step 6: terraform apply --auto-approve
 - step 7: terraform apply --auto-approve
-- step 8: In terminal we will have domian endpoints Url then use the url to access our application
+- step 8: terraform apply --auto-approve
+- step 9: In terminal we will have domian endpoints Url then use the url to access our application
 
 - We have added the comments to understand the code proccess in each files 
 The development process of the application is facilitated by several tools and practices. The application was worked on in a local development environment in Visual Studio Code, a text editor. The following tools were installed in the local environment to enable testing parts of the application locally - 
