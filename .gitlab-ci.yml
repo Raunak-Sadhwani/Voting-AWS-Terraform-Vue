@@ -17,6 +17,7 @@ stages:
   - validate
   - plan
   - apply
+  - destroy
 
 validate:
  stage: validate
@@ -30,36 +31,46 @@ validate:
 
 plan:
  stage: plan
- before_script:
-   - apk update && apk add --no-cache nodejs npm
-   - npm install -g npm@latest
-   - npm ci
  script:
   - terraform init 
   - terraform plan -out terraform.tfplan
  artifacts:
   paths:
-   - dist/
-   - node_modules/
    - terraform.tfstate
    - .terraform.lock.hcl
    - terraform.tfplan
-   - npm run build
  dependencies:
   - validate
 
 apply:
   stage: apply
+  before_script:
+   - apk update && apk add --no-cache nodejs npm
+   - npm install -g npm@latest
+   - npm ci
   script:
+    - npm run build
     - terraform init 
     - terraform apply -auto-approve terraform.tfplan || terraform apply -auto-approve 
     - npm run build
-    - terraform apply -auto-approve
+    - terraform apply -auto-approve 
   artifacts:
     paths:
     - dist/
     - node_modules/
     - terraform.tfstate
     - .terraform.lock.hcl
+    - terraform.tfplan
   only:
     - main
+
+destroy:
+  stage: destroy
+  script:
+    - terraform init
+    - terraform destroy -auto-approve terraform.tfplan || terraform destroy -auto-approve
+  only:
+    - main
+  when: manual 
+ 
+
