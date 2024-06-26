@@ -237,43 +237,42 @@ The development process of the application is facilitated by several tools and p
 
 -  **JavaScript language** : was used in implementing the REST api endpoints and node_module installation is automated in code for macos and Ubuntu. 
 
-**3.2 Docker** : 
-The Docker image encapsulates the necessary dependencies and environment for executing Terraform scripts. It streamlines the CI/CD process and enhances the reliability of infrastructure deployment tasks.
 
 
-**3.3 Deployment Process**
-Code changes in the serverless Employee Management platform are deployed using GitLab's CI/CD pipelines. The deployment process involves the following steps:
+**3.3 Deployment Process
+*Code changes in the serverless Employee Management platform are deployed using GitLab's CI/CD pipelines. The deployment process involves the following steps:
 
-1. **Version Control and Collaboration**: Developers work in feature branches in the Git repository and collaborate using GitLab's version control system. Branches are created for each new feature or bug fix.
+*Version Control and Collaboration: Developers use feature branches in the Git repository and collaborate via GitLab's version control system. Each new feature or bug fix gets its own branch.
 
-2. **Continuous Integration/Continuous Deployment (CI/CD)**: The CI/CD pipeline is triggered automatically when changes are pushed to the repository. It performs automated builds, tests, and deployments.due to use of cloudfront sometimes it takes time to build.
+*Continuous Integration/Continuous Deployment (CI/CD): The CI/CD pipeline is automatically triggered when changes are pushed to the repository. It performs automated builds, tests, and deployments. Sometimes, due to CloudFront, the build process can take extra time.
 
 3. **Test and Deploy**: During the pipeline, the code changes are built, tested, and packaged for deployment. 
 
-**3.4 Automation**
--  **Terraform** : an Infrastructure as Code tool, was used for automated infrastructure provisioning and management, ensuring consistent and reproducible deployments. It was used to define the AWS resources required for the application, such as API Gateway, Lambda functions, DynamoDB, and IAM policies.
--  **lambda testing** Jest test enables GitLab CI/CD pipelines to automatically run tests whenever code changes are pushed to your repository.
-- **CI/CD**: When code changes are deployed, GitLab CI/CD automatically applies the Terraform configuration, which creates, updates, or deletes the necessary AWS resources.
+**3.4 Automation
+*Terraform: An Infrastructure as Code tool, used for automated infrastructure setup and management, ensuring consistent and reproducible deployments. It defined the AWS resources needed for the application, including API Gateway, Lambda functions, DynamoDB, and IAM policies.
+*Lambda Testing: Jest tests enable GitLab CI/CD pipelines to automatically run tests whenever code changes are pushed to the repository.
+*CI/CD: GitLab CI/CD automatically applies the Terraform configuration when code changes are deployed, creating, updating, or deleting the necessary AWS resources.
 
-**3.5 Build pipeline**
 
-![](images/deploy.jpeg)
 
 
 ## Chapter 4 - Lessons Learned
 ### 4.1 - Learnings
 
-- We have embarked on a captivating journey into the realm of cloud platforms. The evolution from those stringent measures to the seamless access of easily scalable, robust hardware through minimal lines of declarative configuration or a few intuitive clicks on cloud platforms has been a revelation.
-Amidst this exploration, We delved into various AWS services, acquiring practical skills in deploying static websites, defining REST APIs with a specific focus on user authentication using Cognito, optimizing content delivery through CloudFront, implementing Lambda functions, and mastering data interactions with DynamoDB for CRUD operations.
-However, this journey wasn't without its challenges. Notably, we encountered a 403 Forbidden error during API testing, which required a nuanced approach in policy definition (as reflected in policy.tf). Additionally, grappling with CORS errors during URL automation and REST API deployment demanded innovative solutions, including a unique adjustment to the source_arn of aws_lambda_permission and the implementation of a dedicated CORS handling file in the project.
-This journey has not only enriched our technical proficiency but has also provided valuable insights into troubleshooting and optimizing cloud-based infrastructures. We've accomplished the following activities:
-* Deployed a static website.
-* Defined a REST API 
-* Cognito for user authentication.
-* CloudFront for content delivery.
-* Implemented Lambda functions.
-* Interacted with DynamoDB for CRUD operations.
-* Implemented SES for Email notifications
+We started an exciting journey into cloud platforms, moving from complex setups to easily scalable hardware with simple configurations. We learned to deploy static websites, create REST APIs with Cognito for user authentication, optimize content delivery with CloudFront, implement Lambda functions, and perform CRUD operations with DynamoDB.
+
+We faced challenges like a 403 Forbidden error during API testing, which required policy adjustments, and CORS errors during URL automation and API deployment, which we resolved creatively. This journey improved our technical skills and troubleshooting abilities.
+
+Activities accomplished:
+
+*Deployed a static website.
+*Defined a REST API.
+*Used Cognito for user authentication.
+*Optimized content delivery with CloudFront.
+*Implemented Lambda functions.
+*Interacted with DynamoDB for operations.
+
+
 
 ### 4.2 - Challenges Faced and Solutions (complicated)
 
@@ -302,26 +301,25 @@ In order to fetch the api url for performing operations from the frontend web pa
 ### 4.2.5 - Gitlab access issue 
 - Due some issues in the vactions we were not able to access gitlab so we were collabrating through personal accounts 
 
-### 4.2.6- Passing the Key for SES trigger
-- We faced a issue to trigger the SES from front end. We are using a checkbox to pass Yes or No value to Convicted parameter. But by default, the Checkbox inputs boolean values and it was passed as false and true. We solved this by changing the code to pass Yes when checkbox is ticked and No when it is unchecked in our html file. 
 ### 4.2.7 Have you been surprised by anything?
 - we learnt about auto genrated id's so, it was new concept for us we implemented it in our code.for example 
 The Terraform script dynamically generates names for the S3 bucket and Cognito User Pool resources using a random_id resource. The random_id generates a unique identifier, and this identifier is concatenated with resource types to create distinct and automatically generated names. This practice helps prevent naming conflicts and ensures uniqueness each time the Terraform configuration is applied.
 
 ## Referances
-## 1 <a href="https://developer.hashicorp.com/terraform/tutorials/aws-get-started">https://developer.hashicorp.com/terraform/tutorials/aws-get-started 
+## 1 <a href="https://medium.com/carlos-hernandez/user-control-with-cognito-and-api-gateway-4c3d99b2f414
 </a>
 <br>
 
-## 2 <a href="https://medium.com/@thearaseng/build-s3-static-website-and-cloudfront-using-terraform-and-gitlab-888a8ec1d37d">https://medium.com/@thearaseng/build-s3-static-website-and-cloudfront-using-terraform-and-gitlab-888a8ec1d37d
+## 2 <a href="https://spacelift.io/blog/terraform-in-ci-cd
+<br>
+</a>
+## 3 <a href="https://spacelift.io/blog/terraform-api-gateway
+<br>
 </a>
 
 ## Chapter 5 - Conclusion
 
-- In this course, we have learnt the basics of Cloud computing and building an serverless application using terraform. 
-- We gained understanding on the communication between some AWS services and their implementation through terraform. 
-- As a part of the course completion, we built a serverless application for "Employee Management Portal" using the basics of cloud. 
-
+- In this course, we explored the fundamentals of cloud computing and developed a serverless application using Terraform. We learned how various AWS services interact and how to implement these interactions through Terraform. As part of the course, we applied our knowledge to create a serverless "voting Management Portal." This project allowed us to gain hands-on experience in building cloud-based solutions, emphasizing the seamless communication between AWS components and the practical implementation of serverless architecture. Overall, the course provided a comprehensive introduction to cloud computing concepts and Terraform's role in managing infrastructure as code.
 
 
 # Project Video
