@@ -40,7 +40,7 @@ The project involves the development of voting Management System, serving as a c
 
 Amazon Cognito Integration:
 Amazon Cognito is integrated for robust identity management and user authentication.
-In our project we used it for login to admin portal to check how many people voted till now. instead of using hosted ui provided by cognate we used tokens to atuhrize persons identity.
+In our project we used it for login to admin portal to check how many people voted till now. in1. stead of using hosted ui provided by cognate we used tokens to atuhrize persons identity.
 
 
 
@@ -318,7 +318,7 @@ Integrating Cognito proved to be challenging due to its complex configuration re
 
 
 # Project Video
-<video src=".mp4" controls title="Project Video"></video>
+<video src="Screenshot/cloud.mp4" controls title="Project Video"></video>
 
 
 
