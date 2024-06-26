@@ -1,55 +1,55 @@
-# resource "aws_s3_bucket" "cloudfront_logs" {
-#   bucket = var.bucket_name
-# #     grant {
-# #     type        = "Group"
-# #     uri         = "http://acs.amazonaws.com/groups/s3/LogDelivery"
-# #     permissions = ["WRITE"]
-# #   }
-# }
-
-# resource "aws_cloudfront_distribution" "frontend_distribution" {
-#   origin {
-#     domain_name = aws_s3_bucket.firstbucket.bucket_regional_domain_name
-#     origin_id   = "S3-frontend-bucket"
+resource "aws_s3_bucket" "cloudfront_logs" {
+  bucket = var.bucket_name
+#     grant {
+#     type        = "Group"
+#     uri         = "http://acs.amazonaws.com/groups/s3/LogDelivery"
+#     permissions = ["WRITE"]
 #   }
+}
 
-#   enabled             = true
-#   is_ipv6_enabled     = true
-#   comment             = "CloudFront distribution for frontend"
-#   default_root_object = "index.html"
+resource "aws_cloudfront_distribution" "frontend_distribution" {
+  origin {
+    domain_name = aws_s3_bucket.firstbucket.bucket_regional_domain_name
+    origin_id   = "S3-frontend-bucket"
+  }
 
-#   default_cache_behavior {
-#     allowed_methods  = ["GET", "HEAD"]
-#     cached_methods   = ["GET", "HEAD"]
-#     target_origin_id = "S3-frontend-bucket"
+  enabled             = true
+  is_ipv6_enabled     = true
+  comment             = "CloudFront distribution for frontend"
+  default_root_object = "index.html"
 
-#     forwarded_values {
-#       query_string = false
-#       cookies {
-#         forward = "none"
-#       }
-#     }
+  default_cache_behavior {
+    allowed_methods  = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "S3-frontend-bucket"
 
-#     viewer_protocol_policy = "redirect-to-https"
-#   }
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
+    }
 
-#   restrictions {
-#     geo_restriction {
-#       restriction_type = "none"
-#     }
-#   }
+    viewer_protocol_policy = "redirect-to-https"
+  }
 
-#   logging_config {
-#     bucket = aws_s3_bucket.cloudfront_logs.bucket_domain_name
-#     include_cookies = false
-#     prefix = "frontend/"
-#   }
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
 
-#   viewer_certificate {
-#     cloudfront_default_certificate = true
-#   }
-# }
+  logging_config {
+    bucket = aws_s3_bucket.cloudfront_logs.bucket_domain_name
+    include_cookies = false
+    prefix = "frontend/"
+  }
 
-# output "cloudfront_url" {
-#   value = aws_cloudfront_distribution.frontend_distribution.domain_name
-# }
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+}
+
+output "cloudfront_url" {
+  value = aws_cloudfront_distribution.frontend_distribution.domain_name
+}
