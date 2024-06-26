@@ -80,8 +80,8 @@ Figure 1.1.5 - ReLogin Page
 **2.1 setup of architecture**
 We planned our application requirements in a simple format and looked for suitable AWS services and structured the architecture
 
-![](images/architecture.png)
-Figure 2.1 - Architecture of Employee managemnt project
+![](/Screenshot/Arch.png)
+Figure 2.1 - Architecture of Voting managemnt project
 
 
 **2.2 AWS - Services Used**
