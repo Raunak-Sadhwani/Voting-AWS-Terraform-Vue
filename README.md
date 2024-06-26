@@ -318,7 +318,7 @@ Integrating Cognito proved to be challenging due to its complex configuration re
 
 
 # Project Video
-<video src="Screenshot/cloud.mp4" controls title="Project Video"></video>
+![](Screenshot/cloud.mp4)
 
 
 
