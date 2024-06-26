@@ -40,7 +40,10 @@ plan:
   - terraform plan
  artifacts:
   paths:
+   - dist/
+   - node_modules/
    - terraform/terraform.tfstate
+   - .terraform.lock.hcl
  dependencies:
   - validate
 
@@ -57,6 +60,7 @@ apply:
   - terraform apply -auto-approve
  artifacts:
   paths:
+   - .terraform.lock.hcl
    - dist/
    - terraform/terraform.tfstate
  only:
