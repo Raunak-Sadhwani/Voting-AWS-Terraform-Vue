@@ -63,18 +63,17 @@ Employees, who are the voters, can visit the website to vote for the candidate t
 ### 1.1 screenshots of the application:
 Here are some screenshots of the frontend of the application which is available at 
 
-Figure 1.1.1 Sign in page 
-![](images/firstpage.jpeg)
-Figure 1.1.2 - Please Signup 
-![](images/unregisterusers.jpeg)
-Figure 1.1.3 - SignUp Page
-![](images/singup.jpeg)
-Figure 1.1.4 - DashBoard
-![](images/from.jpeg)
-Figure 1.1.5 - Employee Data Table
-![](images/table.jpeg)
-Figure 1.1.5 - ReLogin Page
-![](images/existinglogin.jpeg)
+Figure 1.1.1 Home Page 
+![](Screenshot/Homesite.png)
+Figure 1.1.2 - About us
+![](Screenshot/About.png)
+Figure 1.1.3 - Admins Page
+![](Screenshot/Admin_panel.png)
+Figure 1.1.4 - voter List
+![](Screenshot/Voter_list.png)
+Figure 1.1.5 - Result
+![](Screenshot/Result.png)
+
 
 ## Chapter 2 - Architecture 
 **2.1 setup of architecture**
