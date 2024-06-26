@@ -22,7 +22,9 @@ stages:
 validate:
  stage: validate
  before_script:
+   - apk update && apk add --no-cache nodejs npm
    - npm install -g npm@latest
+   - npm ci
  artifacts:
    paths:
     - node_modules/
