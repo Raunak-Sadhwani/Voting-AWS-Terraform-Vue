@@ -3,6 +3,10 @@ provider "aws" {
   region            = var.aws_region
 }
 
+
+
+
+
 locals {
   mime_types = {
     css  = "text/css"
