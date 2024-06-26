@@ -49,7 +49,7 @@ To provide a user-friendly interface, the frontend of the application was develo
 
 The backend of the application is built as a serverless application using AWS Lambda and JS. The backend exposes Representational State Transfer (REST) API endpoints that handle requests from the frontend. The data is stored in DynamoDB, a cloud database service provided by AWS. The use of serverless architecture allows for automatic scaling based on demand, ensuring efficient resource allocation.
 
-### 1.1 Application doing 
+### 1.1 Application Working 
 Our Application is an interface to store new employees details in the database and perform operations on that data. New employee can be added, View, Update and delete existing from the database. Only the Employee admin team can perform these operations. We also have an alert mechanism for Convicted employees and an Alert Email is sent to HR when a Convicted Employee is added to the database. 
 Our website enables employees to cast votes for electing candidates to various organizational positions. Employees can visit the site to view candidate details, including manifestos, before casting their votes. After selecting a candidate, employees must enter their name, email, and voter ID provided by the organization. A "View Result" button allows employees to see the number of votes each candidate has received.
 
@@ -107,7 +107,7 @@ company Table--
 
 
 <table>
-    <tbody>
+    <!-- <tbody> -->
         <tr>
             <td><strong>Attribute</strong></td>
             <td><strong>Data Type</strong></td>
@@ -141,7 +141,7 @@ company Table--
             <td>Number</td>
         </tr>
        
-    </tbody>
+   
 </table>
 
 
@@ -170,7 +170,7 @@ voters table
             <td>string</td>
         </tr>
        
-    </tbody>
+    
 </table>
 
  **2.5 Application Programming Interface (API)**
@@ -229,29 +229,30 @@ In this system, different AWS components work together to keep everything runnin
 - step 8: terraform apply --auto-approve
 - step 9: In terminal we will have domian endpoints Url then use the url to access our application
 
-- We have added the comments to understand the code proccess in each files 
-The development process of the application is facilitated by several tools and practices. The application was worked on in a local development environment in Visual Studio Code, a text editor. The following tools were installed in the local environment to enable testing parts of the application locally - 
-
--  **Command Line Interface for Amazon Web Services** (aws-cli) : for interacting with resources in the AWS account. An IAM user was created in the AWS portal and the access key id, secret access key and default aws region were stored in a file on disk located at  ~./aws/credentials
--  **Git** : a version control system was used to save code changes, fetch code from the remote repository and also send code (push) to the remote repository.
-
--  **JavaScript language** : was used in implementing the REST api endpoints and node_module installation is automated in code for macos and Ubuntu. 
-
+- 
 
 
 **3.3 Deployment Process
-*Code changes in the serverless Employee Management platform are deployed using GitLab's CI/CD pipelines. The deployment process involves the following steps:
+Code changes in the serverless voting management platform are deployed using GitLab's CI/CD pipelines. The deployment process involves the following steps:
 
-*Version Control and Collaboration: Developers use feature branches in the Git repository and collaborate via GitLab's version control system. Each new feature or bug fix gets its own branch.
+Version Control and Collaboration: Developers utilize feature branches in the Git repository and collaborate via GitLab's version control system. Each new feature or bug fix is developed in its own branch.
 
-*Continuous Integration/Continuous Deployment (CI/CD): The CI/CD pipeline is automatically triggered when changes are pushed to the repository. It performs automated builds, tests, and deployments. Sometimes, due to CloudFront, the build process can take extra time.
+Continuous Integration/Continuous Deployment (CI/CD): GitLab's CI/CD pipeline automatically triggers when changes are pushed to the repository. It facilitates automated builds, tests, and deployments. Occasionally, the build process may experience delays due to CloudFront integration.
 
-3. **Test and Deploy**: During the pipeline, the code changes are built, tested, and packaged for deployment. 
+Test and Deploy: Within the pipeline, code changes undergo building, testing, and packaging in preparation for deployment.
 
-**3.4 Automation
-*Terraform: An Infrastructure as Code tool, used for automated infrastructure setup and management, ensuring consistent and reproducible deployments. It defined the AWS resources needed for the application, including API Gateway, Lambda functions, DynamoDB, and IAM policies.
-*Lambda Testing: Jest tests enable GitLab CI/CD pipelines to automatically run tests whenever code changes are pushed to the repository.
-*CI/CD: GitLab CI/CD automatically applies the Terraform configuration when code changes are deployed, creating, updating, or deleting the necessary AWS resources.
+Terraform: As an Infrastructure as Code tool, Terraform automates the setup and management of infrastructure, ensuring deployments are consistent and reproducible. It defined essential AWS resources like API Gateway, Lambda functions, DynamoDB, and IAM policies for our application.
+
+Lambda Testing: Using Jest tests, GitLab CI/CD pipelines automatically execute tests whenever there are code changes in the repository, ensuring continuous validation of Lambda functions.
+
+CI/CD: GitLab CI/CD seamlessly integrates with Terraform, automatically applying configurations upon code deployment. This process efficiently manages AWS resources, handling creation, updates, or deletions as required by the application's evolving needs.
+
+
+
+
+
+
+
 
 
 
@@ -278,44 +279,40 @@ Activities accomplished:
 
 ### 4.2.1 - 403 Forbidden Error for API Testing
 
-- Encountering a 403 Forbidden error during API testing led to the realization that additional policies needed to be defined. This was addressed by adding relevant policies in policy.tf.
+- 
+We encountered a 403 Forbidden error during API testing, which required a careful review and adjustment of our IAM policies to ensure the correct permissions were granted for accessing the API.
+
 ## Referance <a href="https://medium.com/collaborne-engineering/403-cursed-by-cors-d1700cab754">https://medium.com/collaborne-engineering/403-cursed-by-cors-d1700cab754</a>
 
 
 ### 4.2.2 - CORS Error Resolution
 
-- Issue Deploying the REST API
-During frontend testing, a CORS error emerged due to insufficient knowledge about cross-functional errors. The issue was addressed by learning more about CORS and implementing a specific file to handle it.
+- Resolving CORS errors involved configuring the appropriate CORS headers in our API Gateway responses to allow cross-origin requests from the frontend application. Additionally, we adjusted the AWS Lambda function permissions and integrated CORS handling directly within our serverless application to ensure seamless communication between different origins.
 ## Referance <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-cors.html">https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-cors.html
 </a>
 
-### 4.2.3 - Fetching the API_URL With script 
+### 4.2.3 - Route error 
 - The api url was fetched from the html file using a json file. First we performed echo operation to save the api url in a json file(api_url.json). This echo operation is done in the output.tf file. The api_url is saved in the json file as a key-value pair and this file is created in the frontend folder. 
 From the json file, we are fetching the url into the html file using fetch operation in  tag. We are reading the json file and saving the value of the api_url key into a variable “apiUrl”. This apiUrl is made to be globally accessible and is used in code for GET, POST and PUT operation. 
 The url is saved to a variable when we run the terraform apply cmd once. 
 In order to fetch the api url for performing operations from the frontend web page, we have to run terraform apply once again, i.e we run terraform apply twice overall. This is one of the challenge we faced and found that running the terraform apply cmd twice, can fetch us the required url to perform the operations from front end.
 
-### 4.2.4 - Difficult to resolve
-- The URL can be accessed successfully after the second Terraform apply operation.
+### 4.2.4 - Difficult to integrate cognito
 
-### 4.2.5 - Gitlab access issue 
-- Due some issues in the vactions we were not able to access gitlab so we were collabrating through personal accounts 
 
-### 4.2.7 Have you been surprised by anything?
-- we learnt about auto genrated id's so, it was new concept for us we implemented it in our code.for example 
-The Terraform script dynamically generates names for the S3 bucket and Cognito User Pool resources using a random_id resource. The random_id generates a unique identifier, and this identifier is concatenated with resource types to create distinct and automatically generated names. This practice helps prevent naming conflicts and ensures uniqueness each time the Terraform configuration is applied.
+Integrating Cognito proved to be challenging due to its complex configuration requirements and the need for precise setup to handle user authentication and authorization correctly. We encountered difficulties in managing user pools, configuring identity providers, and ensuring seamless integration with other AWS services.
+
+### 4.2.4 - CI/CD pipeline not Working
+
 
 ## Referances
 ## 1  "https://medium.com/carlos-hernandez/user-control-with-cognito-and-api-gateway-4c3d99b2f414
-</a>
-<br>
+
 
 ## 2  "https://spacelift.io/blog/terraform-in-ci-cd
-<br>
-</a>
-## 3 "https://spacelift.io/blog/terraform-api-gateway
-<br>
-</a>
+
+## 3  "https://spacelift.io/blog/terraform-api-gateway
+
 
 ## Chapter 5 - Conclusion
 
