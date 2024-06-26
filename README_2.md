@@ -306,14 +306,14 @@ In order to fetch the api url for performing operations from the frontend web pa
 The Terraform script dynamically generates names for the S3 bucket and Cognito User Pool resources using a random_id resource. The random_id generates a unique identifier, and this identifier is concatenated with resource types to create distinct and automatically generated names. This practice helps prevent naming conflicts and ensures uniqueness each time the Terraform configuration is applied.
 
 ## Referances
-## 1 <a href="https://medium.com/carlos-hernandez/user-control-with-cognito-and-api-gateway-4c3d99b2f414
+## 1 [] ("https://medium.com/carlos-hernandez/user-control-with-cognito-and-api-gateway-4c3d99b2f414)
 </a>
 <br>
 
-## 2 <a href="https://spacelift.io/blog/terraform-in-ci-cd
+## 2 [] href="https://spacelift.io/blog/terraform-in-ci-cd
 <br>
 </a>
-## 3 <a href="https://spacelift.io/blog/terraform-api-gateway
+## 3 [] href="https://spacelift.io/blog/terraform-api-gateway
 <br>
 </a>
 
