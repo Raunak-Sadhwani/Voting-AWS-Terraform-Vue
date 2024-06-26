@@ -7,7 +7,7 @@ variables:
  AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
 
 before_script:
- - apk update --repository=http://dl-cdn.alpinelinux.org/alpine/v3.13/main
+ - apk update --repository=http://dl-cdn.alpinelinux.org/alpine/v3.13/main && apk add --no-cache nodejs npm
  - apk add aws-cli
  - apk add bash
  - apk add npm
@@ -18,10 +18,15 @@ stages:
   - plan
   - apply
   - destroy
- 
 
 validate:
  stage: validate
+ before_script:
+   - npm install -g npm@latest
+ artifacts:
+   paths:
+    - node_modules/
+    - dist/
  script:
   - terraform init -backend=false
   - terraform validate
