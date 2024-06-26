@@ -29,9 +29,12 @@ validate:
    paths:
     - node_modules/
     - dist/
+    - terraform/terraform.tfstate
+    - .terraform.lock.hcl
  script:
   - terraform init -backend=false
   - terraform validate
+  - npm run build
 
 plan:
  stage: plan
@@ -55,13 +58,14 @@ apply:
   - npm ci
  script:
   - terraform init
-  - terraform apply -auto-approve
+  - terraform apply -auto-approve || npm run build
   - npm run build
-  - terraform apply -auto-approve
+  - terraform apply -auto-approve || terraform apply -auto-approve
  artifacts:
   paths:
    - .terraform.lock.hcl
    - dist/
+   - node_modules/
    - terraform/terraform.tfstate
  only:
   - main
