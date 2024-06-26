@@ -60,7 +60,7 @@ apply:
   - terraform init
   - terraform apply -auto-approve || npm run build
   - npm run build
-  - terraform apply -auto-approve || terraform apply -auto-approve
+  - terraform apply -auto-approve || terraform apply -auto-approve || terraform destroy -auto-approve
  artifacts:
   paths:
    - .terraform.lock.hcl
